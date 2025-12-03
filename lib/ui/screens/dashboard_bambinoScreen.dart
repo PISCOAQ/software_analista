@@ -86,7 +86,7 @@ class Dashboard_bambinoScreen extends StatelessWidget {
                   // ------------------------
                   //   CARD STATO GENERALE
                   // ------------------------
-                  Card(
+                  /*Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -108,7 +108,7 @@ class Dashboard_bambinoScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ),
+                  ),*/
 
                   const SizedBox(height: 20),
 

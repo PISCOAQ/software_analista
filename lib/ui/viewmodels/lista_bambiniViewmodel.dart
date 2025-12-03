@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:software_analista/datiFake.dart/dati.dart';
+import 'package:software_analista/datiFinti/dati.dart';
 import 'package:software_analista/domain/models/bambino.dart';
 
 class lista_bambiniViewmodel extends ChangeNotifier{
