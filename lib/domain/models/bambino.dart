@@ -1,22 +1,21 @@
-import 'package:software_analista/domain/models/percorso.dart';
+import 'package:software_analista/domain/models/progressoPercorso.dart';
+import 'package:software_analista/domain/models/sesso.dart';
 
-enum Sesso {Maschio, Femmina, Altro}
-
-class bambino{
+class Bambino{
     final String id;
     final String nome;
     final String cognome;
-    final DateTime DataDiNascita;
+    final DateTime dataDiNascita;
     final Sesso sesso;
-    final List<percorso> percorsiBambino;
+    final List<ProgressoPercorso> progressiBambino;
 
-    bambino({
+    Bambino({
       required this.id,
       required this.nome,
       required this.cognome,
-      required this.DataDiNascita,
+      required this.dataDiNascita,
       required this.sesso,
-      this.percorsiBambino = const[],
-    });
+      List<ProgressoPercorso>? progressiBambino,
+  }) : progressiBambino = progressiBambino ?? [];
 
 }

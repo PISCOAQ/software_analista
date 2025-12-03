@@ -1,19 +1,22 @@
 import 'package:software_analista/domain/models/progressoPercorso.dart';
 
-class percorso{
+class Percorso{
+  final String id;
   final int numNodi;
   final String nome;
   final String descrizione;
   final DateTime dataInizio;
   final DateTime? dataFIne;
-  final progressoPercorso? progresso;
+  //final ProgressoPercorso progresso;
 
-  percorso({
+  Percorso({
+    required this.id,
     required this.numNodi,
     required this.nome,
     required this.descrizione,
     required this.dataInizio,
     this.dataFIne,
-    this.progresso,
+    //required this.progresso,
   });
+
 }
