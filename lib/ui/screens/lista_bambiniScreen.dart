@@ -3,6 +3,7 @@ import 'package:software_analista/domain/models/bambino.dart';
 import 'package:software_analista/domain/models/sesso.dart';
 import 'package:software_analista/ui/screens/dashboard_bambinoScreen.dart';
 import 'package:software_analista/ui/screens/lista_percorsiScreen.dart';
+import 'package:software_analista/ui/screens/registrazione_bambinoScreen.dart';
 import 'package:software_analista/ui/viewmodels/lista_bambiniViewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:software_analista/ui/widgets/tab_button.dart';
@@ -23,7 +24,28 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
       appBar: AppBar(
         title: const Text("I bambini seguiti"),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: "Aggiungi bambino",
+            onPressed: () async {
+              // Naviga allo screen di registrazione
+              final nuovoBambino = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (_) => const RegistrazioneBambinoScreen(),
+              ),
+              );
+              // Se viene creato un nuovo bambino, aggiorna la lista
+              if (nuovoBambino != null) {
+                final vm = context.read<lista_bambiniViewmodel>();
+                vm.aggiungiBambino(nuovoBambino); // metodo da implementare nel ViewModel
+              }
+            },
+          ),
+        ],
       ),
+
       body: Column(
         children: [
           const SizedBox(height: 10),
