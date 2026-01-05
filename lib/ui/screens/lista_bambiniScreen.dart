@@ -39,7 +39,7 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
               // Se viene creato un nuovo bambino, aggiorna la lista
               if (nuovoBambino != null) {
                 final vm = context.read<lista_bambiniViewmodel>();
-                vm.aggiungiBambino(nuovoBambino); // metodo da implementare nel ViewModel
+                vm.aggiungiBambino(nuovoBambino); 
               }
             },
           ),
