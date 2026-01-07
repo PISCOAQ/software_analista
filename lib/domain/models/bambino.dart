@@ -23,10 +23,10 @@ class Bambino{
   // 🔹 JSON → Dart
   factory Bambino.fromJson(Map<String, dynamic> json) {
     return Bambino(
-      id: json['id'],
+      id: json['_id'],
       nome: json['nome'],
       cognome: json['cognome'],
-      dataDiNascita: DateTime.parse(json['dataDiNascita']),
+      dataDiNascita: DateTime.parse(json['dataNascita']),
       sesso: Sesso.values.firstWhere(
         (e) => e.name == json['sesso'],
       ),

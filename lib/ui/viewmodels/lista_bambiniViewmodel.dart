@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:software_analista/datiFinti/dati.dart';
 import 'package:software_analista/domain/models/bambino.dart';
+import 'package:software_analista/data/service/lista_bambiniService.dart';
+import 'package:software_analista/data/repository/lista_bambiniRepository.dart';
 
 class lista_bambiniViewmodel extends ChangeNotifier{
+  final ListaBambiniRepository _repository = ListaBambiniRepository(ListaBambiniService());
   List<Bambino> _bambini = [];
   bool _isLoading = true;
 
@@ -18,7 +21,7 @@ class lista_bambiniViewmodel extends ChangeNotifier{
     notifyListeners();
 
     await Future.delayed(const Duration(milliseconds: 500));
-    _bambini = bambiniFinti;
+    _bambini = await _repository.listaBambini();
     _isLoading = false;
     notifyListeners();
   }

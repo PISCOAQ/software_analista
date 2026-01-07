@@ -51,6 +51,41 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
                     onChanged: vm.updateSesso,
                   ),
                   const SizedBox(height: 24),
+
+                  /// 📅 DATA DI NASCITA
+                  InkWell(
+                    onTap: () async {
+                      final pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: vm.dataNascita ?? DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime.now(),
+                      );
+
+                      if (pickedDate != null) {
+                        vm.updateDataNascita(pickedDate);
+                      }
+                    },
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        labelText: 'Data di nascita',
+                        border: OutlineInputBorder(),
+                      ),
+                      child: Text(
+                        vm.dataNascita != null
+                            ? '${vm.dataNascita!.day}/${vm.dataNascita!.month}/${vm.dataNascita!.year}'
+                            : 'Seleziona una data',
+                        style: TextStyle(
+                          color: vm.dataNascita != null
+                              ? Colors.black
+                              : Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
                   // 🔴 Messaggio di errore
           if (vm.errorMessage != null)
             Padding(

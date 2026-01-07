@@ -7,7 +7,7 @@ class RegistrazioneBambinoService {
 
   Future<void> creaBambino(Bambino bambino) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/bambini'),
+      Uri.parse('$baseUrl/bambino'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(bambino.toJson()),
     );

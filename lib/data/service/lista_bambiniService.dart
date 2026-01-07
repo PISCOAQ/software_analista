@@ -6,9 +6,14 @@ class ListaBambiniService {
   final String baseUrl = 'http://localhost:3000';
 
   Future<List<Bambino>> listaBambini() async {
+    print('➡️ Chiamata API lista bambini');
     final response = await http.get(
-      Uri.parse('$baseUrl/bambini'),
+      Uri.parse('$baseUrl/bambino'),
     );
+
+    print('⬅️ Status: ${response.statusCode}');
+    print('⬅️ Body: ${response.body}');
+
 
     if (response.statusCode != 200) {
       throw Exception('Errore caricamento bambini');
