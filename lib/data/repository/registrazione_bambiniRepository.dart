@@ -4,9 +4,9 @@ import 'package:software_analista/domain/models/bambino.dart';
 class RegistrazioneBambinoRepository {
   final RegistrazioneBambinoService service;
 
-  RegistrazioneBambinoRepository(this.service);
+  RegistrazioneBambinoRepository({required this.service});
 
-  Future<void> creaBambino(Bambino bambino) {
+  Future<Bambino> creaBambino(Bambino bambino) {
     return service.creaBambino(bambino);
   }
 }

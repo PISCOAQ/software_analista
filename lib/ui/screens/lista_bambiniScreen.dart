@@ -26,7 +26,7 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.person_add),
             tooltip: "Aggiungi bambino",
             onPressed: () async {
               // Naviga allo screen di registrazione

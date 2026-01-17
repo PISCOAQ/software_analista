@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:software_analista/data/repository/registrazione_bambiniRepository.dart';
+import 'package:software_analista/data/service/registrazione_bambiniService.dart';
 import 'package:software_analista/ui/viewmodels/registrazioneBambino_Viewmodel.dart';
 import 'package:software_analista/domain/models/sesso.dart';
 
@@ -9,7 +11,11 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => Registrazionebambino_Viewmodel(),
+      create: (_) => Registrazionebambino_Viewmodel(
+        repository: RegistrazioneBambinoRepository(
+          service: RegistrazioneBambinoService()
+          )
+      ),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Registrazione nuovo bambino'),
@@ -98,8 +104,8 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                              final nuovoBambino =  vm.creaBambino();
+                      onPressed: () async{
+                              final nuovoBambino = await vm.registraBambino();
                               if (nuovoBambino != null) {
                                 Navigator.pop(context, nuovoBambino);
                               }

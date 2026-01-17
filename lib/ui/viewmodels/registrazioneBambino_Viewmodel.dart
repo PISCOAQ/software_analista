@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:software_analista/data/repository/registrazione_bambiniRepository.dart';
+import 'package:software_analista/data/service/registrazione_bambiniService.dart';
 import 'package:software_analista/domain/models/bambino.dart';
 import 'package:software_analista/domain/models/percorso.dart';
 import 'package:software_analista/domain/models/sesso.dart';
@@ -12,8 +14,9 @@ class Registrazionebambino_Viewmodel extends ChangeNotifier{
   Percorso? percorso;
   bool isLoading = true;
   String? errorMessage;
+  final RegistrazioneBambinoRepository repository;
 
-  Registrazionebambino_Viewmodel(){
+  Registrazionebambino_Viewmodel({required this.repository}){
     _initForm();
   }
 
@@ -47,22 +50,32 @@ class Registrazionebambino_Viewmodel extends ChangeNotifier{
   }
 
 
-  Bambino? creaBambino() {
-    if (nome.isEmpty || cognome.isEmpty || dataNascita == null || sesso == null) {
+  Future<Bambino?> registraBambino() async {
+    if (nome.isEmpty || cognome.isEmpty || dataNascita == null) {
     errorMessage = 'Compila tutti i campi obbligatori';
-    notifyListeners(); // va bene farlo qui perché è triggerato da un pulsante
+    notifyListeners();
     return null;
-  }
+    }
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+    try {
+      final bambino = Bambino(
+        nome: nome,
+        cognome: cognome,
+        dataDiNascita: dataNascita!,
+        sesso: sesso!,
+      );
 
-  errorMessage = null;
-  notifyListeners();
-
-  return Bambino(
-    id: const Uuid().v4(), // genera un ID univoco
-    nome: nome,
-    cognome: cognome,
-    dataDiNascita: dataNascita!,
-    sesso: sesso,
-  );
+      final bambinoCreato = await repository.creaBambino(bambino);
+      return bambinoCreato; // contiene anche l'ID generato dal backend
+    } catch (e) {
+      errorMessage = 'Errore durante la registrazione: $e';
+      notifyListeners();
+      return null;
+    } finally{
+      isLoading = false;
+      notifyListeners();
+    }
   }
 }

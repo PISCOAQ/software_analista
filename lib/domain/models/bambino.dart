@@ -2,7 +2,7 @@ import 'package:software_analista/domain/models/progressoPercorso.dart';
 import 'package:software_analista/domain/models/sesso.dart';
 
 class Bambino{
-    final String id;
+    final String? id;
     final String nome;
     final String cognome;
     final DateTime dataDiNascita;
@@ -11,7 +11,7 @@ class Bambino{
     final String? percorsoId;
 
     Bambino({
-      required this.id,
+      this.id,
       required this.nome,
       required this.cognome,
       required this.dataDiNascita,
@@ -36,10 +36,9 @@ class Bambino{
   // 🔹 Dart → JSON
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'nome': nome,
       'cognome': cognome,
-      'dataDiNascita': dataDiNascita.toIso8601String(),
+      'dataNascita': dataDiNascita.toIso8601String(),
       'sesso': sesso.name,
     };
   }
