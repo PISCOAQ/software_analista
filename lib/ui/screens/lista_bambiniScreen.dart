@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:software_analista/domain/models/sesso.dart';
 import 'package:software_analista/ui/screens/dashboard_bambinoScreen.dart';
 import 'package:software_analista/ui/screens/registrazione_bambinoScreen.dart';
 import 'package:software_analista/ui/viewmodels/lista_bambiniViewmodel.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:software_analista/ui/screens/HomeScreen.dart';
 import 'package:software_analista/ui/screens/lista_bambiniScreen.dart';
 import 'package:software_analista/ui/screens/lista_percorsiScreen.dart';
+import 'package:software_analista/ui/screens/selezione_bambinoScreen.dart';
 import 'package:software_analista/ui/widgets/Sidebar_item.dart';
 
 class Sidebar extends StatelessWidget {
@@ -46,7 +47,20 @@ class Sidebar extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (_) => Lista_percorsiScreen())
                 );
-            },),
+            },
+          ),
+          SidebarItem(
+            icon: Icons.route,
+            label: 'Assegnazione',
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => SelezioneBambinoScreen())
+                );
+            },
+          
+          ),
+          
           SidebarItem(
             icon: Icons.settings,
             label: 'Impostazioni',

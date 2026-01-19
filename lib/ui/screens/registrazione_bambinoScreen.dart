@@ -4,6 +4,8 @@ import 'package:software_analista/data/repository/registrazione_bambiniRepositor
 import 'package:software_analista/data/service/registrazione_bambiniService.dart';
 import 'package:software_analista/ui/viewmodels/registrazioneBambino_Viewmodel.dart';
 import 'package:software_analista/domain/models/sesso.dart';
+import 'package:software_analista/ui/widgets/Sidebar.dart';
+import 'package:software_analista/ui/widgets/Topbar.dart';
 
 class RegistrazioneBambinoScreen extends StatelessWidget {
   const RegistrazioneBambinoScreen({super.key});
@@ -13,110 +15,141 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => Registrazionebambino_Viewmodel(
         repository: RegistrazioneBambinoRepository(
-          service: RegistrazioneBambinoService()
-          )
+          service: RegistrazioneBambinoService(),
+        ),
       ),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Registrazione nuovo bambino'),
-        ),
-        body: Consumer<Registrazionebambino_Viewmodel>(
-          builder: (context, vm, _) {
-            return Padding(
-              padding: const EdgeInsets.all(16),
+        backgroundColor: Colors.grey.shade100,
+        body: Row(
+          children: [
+            Sidebar(),
+
+            // Contenuto principale
+            Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: 'Nome',
-                    ),
-                    onChanged: vm.updateNome,
-                  ),
-                  const SizedBox(height: 12),
+                  TopBar(),
 
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: 'Cognome',
-                    ),
-                    onChanged: vm.updateCognome,
-                  ),
-                  const SizedBox(height: 12),
-
-                  DropdownButtonFormField<Sesso>(
-                    decoration: const InputDecoration(
-                      labelText: 'Sesso',
-                    ),
-                    value: vm.sesso,
-                    items: Sesso.values.map((s) {
-                      return DropdownMenuItem(
-                        value: s,
-                        child: Text(s.name),
-                      );
-                    }).toList(),
-                    onChanged: vm.updateSesso,
-                  ),
-                  const SizedBox(height: 24),
-
-                  /// 📅 DATA DI NASCITA
-                  InkWell(
-                    onTap: () async {
-                      final pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: vm.dataNascita ?? DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now(),
-                      );
-
-                      if (pickedDate != null) {
-                        vm.updateDataNascita(pickedDate);
-                      }
-                    },
-                    child: InputDecorator(
-                      decoration: const InputDecoration(
-                        labelText: 'Data di nascita',
-                        border: OutlineInputBorder(),
-                      ),
-                      child: Text(
-                        vm.dataNascita != null
-                            ? '${vm.dataNascita!.day}/${vm.dataNascita!.month}/${vm.dataNascita!.year}'
-                            : 'Seleziona una data',
-                        style: TextStyle(
-                          color: vm.dataNascita != null
-                              ? Colors.black
-                              : Colors.grey,
-                        ),
+                  // Titolo della pagina
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    child: Text(
+                      "Registrazione nuovo bambino",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade800,
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  // Contenuto centrale
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(24),
+                      child: Consumer<Registrazionebambino_Viewmodel>(
+                        builder: (context, vm, _) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextField(
+                                decoration: const InputDecoration(
+                                  labelText: 'Nome',
+                                ),
+                                onChanged: vm.updateNome,
+                              ),
+                              const SizedBox(height: 12),
 
-                  // 🔴 Messaggio di errore
-          if (vm.errorMessage != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Text(
-                vm.errorMessage!,
-                style: const TextStyle(color: Colors.red),
-              ),
-            ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () async{
-                              final nuovoBambino = await vm.registraBambino();
-                              if (nuovoBambino != null) {
-                                Navigator.pop(context, nuovoBambino);
-                              }
-                            },
-                      child: const Text('Registra'),
+                              TextField(
+                                decoration: const InputDecoration(
+                                  labelText: 'Cognome',
+                                ),
+                                onChanged: vm.updateCognome,
+                              ),
+                              const SizedBox(height: 12),
+
+                              DropdownButtonFormField<Sesso>(
+                                decoration: const InputDecoration(
+                                  labelText: 'Sesso',
+                                ),
+                                value: vm.sesso,
+                                items: Sesso.values.map((s) {
+                                  return DropdownMenuItem(
+                                    value: s,
+                                    child: Text(s.name),
+                                  );
+                                }).toList(),
+                                onChanged: vm.updateSesso,
+                              ),
+                              const SizedBox(height: 24),
+
+                              /// 📅 DATA DI NASCITA
+                              InkWell(
+                                onTap: () async {
+                                  final pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate:
+                                        vm.dataNascita ?? DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime.now(),
+                                  );
+
+                                  if (pickedDate != null) {
+                                    vm.updateDataNascita(pickedDate);
+                                  }
+                                },
+                                child: InputDecorator(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Data di nascita',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  child: Text(
+                                    vm.dataNascita != null
+                                        ? '${vm.dataNascita!.day}/${vm.dataNascita!.month}/${vm.dataNascita!.year}'
+                                        : 'Seleziona una data',
+                                    style: TextStyle(
+                                      color: vm.dataNascita != null
+                                          ? Colors.black
+                                          : Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+
+                              /// 🔴 Messaggio di errore
+                              if (vm.errorMessage != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: Text(
+                                    vm.errorMessage!,
+                                    style: const TextStyle(color: Colors.red),
+                                  ),
+                                ),
+
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    final nuovoBambino = await vm.registraBambino();
+                                    if (nuovoBambino != null) {
+                                      Navigator.pop(context, nuovoBambino);
+                                    }
+                                  },
+                                  child: const Text('Registra'),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );
