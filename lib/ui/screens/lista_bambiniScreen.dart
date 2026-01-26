@@ -55,7 +55,7 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
                     children: [
                       ElevatedButton.icon(
                         icon: const Icon(Icons.person_add),
-                        label: const Text("Aggiungi bambino"),
+                        label: const Text("Aggiungi utente"),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -75,9 +75,11 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
                           );
 
                           if (nuovoBambino != null) {
+                            debugPrint('RICEVUTO NUOVO BAMBINO');
                             final vm =
                                 context.read<lista_bambiniViewmodel>();
-                            vm.aggiungiBambino(nuovoBambino);
+                                debugPrint('AGGIUNGO BAMBINO -> ${nuovoBambino.nome}');
+                                vm.aggiungiBambino(nuovoBambino);
                           }
                         },
                       ),
@@ -113,7 +115,8 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
           );
         }
 
-        return ListView.builder(
+        return ListView.separated(
+          separatorBuilder: (context, index) => const SizedBox(height: 12),
           padding: const EdgeInsets.all(16),
           itemCount: vm.bambini.length,
           itemBuilder: (context, index) {

@@ -17,19 +17,19 @@ class BambinoCard extends StatelessWidget {
     return Material(
       color: Colors.white,
       borderRadius: BorderRadius.circular(20),
-      elevation: 2,
+      elevation: 1.5,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        splashColor: Colors.blue.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+        splashColor: Colors.black.withOpacity(0.1),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: [
               // Cerchio iconico del sesso
               Container(
-                width: 56,
-                height: 56,
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
                   color: bambino.sesso == Sesso.maschio
                       ? Colors.blue.shade300
@@ -38,7 +38,7 @@ class BambinoCard extends StatelessWidget {
                 ),
                 child: Icon(
                   bambino.sesso == Sesso.maschio ? Icons.boy : Icons.girl,
-                  size: 32,
+                  size: 26,
                   color: Colors.white,
                 ),
               ),
@@ -50,27 +50,29 @@ class BambinoCard extends StatelessWidget {
                   children: [
                     Text(
                       "${bambino.nome} ${bambino.cognome}",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
                         color: Colors.black87,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
                     Text(
                       "Età: ${_calcolaEta(bambino.dataDiNascita)} anni",
                       style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade600,
+                        fontSize: 13,
+                        color: Colors.black87,
                       ),
                     ),
                   ],
                 ),
               ),
               const Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
-                color: Colors.grey,
+                Icons.chevron_right,
+                size: 26,
+                color: Colors.black,
               ),
             ],
           ),

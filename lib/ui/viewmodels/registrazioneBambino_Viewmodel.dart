@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:software_analista/data/repository/registrazione_bambiniRepository.dart';
-import 'package:software_analista/data/service/registrazione_bambiniService.dart';
 import 'package:software_analista/domain/models/bambino.dart';
 import 'package:software_analista/domain/models/percorso.dart';
 import 'package:software_analista/domain/models/sesso.dart';
-import 'package:uuid/uuid.dart';
 
 class Registrazionebambino_Viewmodel extends ChangeNotifier{
   String nome = '';
@@ -52,19 +50,21 @@ class Registrazionebambino_Viewmodel extends ChangeNotifier{
 
   Future<Bambino?> registraBambino() async {
     if (nome.isEmpty || cognome.isEmpty || dataNascita == null) {
-    errorMessage = 'Compila tutti i campi obbligatori';
-    notifyListeners();
-    return null;
+      errorMessage = 'Compila tutti i campi obbligatori';
+      notifyListeners();
+      return null;
     }
     isLoading = true;
     errorMessage = null;
     notifyListeners();
     try {
       final bambino = Bambino(
+        id: null,
         nome: nome,
         cognome: cognome,
         dataDiNascita: dataNascita!,
-        sesso: sesso!,
+        sesso: sesso,
+        codiceGioco: null,
       );
 
       final bambinoCreato = await repository.creaBambino(bambino);

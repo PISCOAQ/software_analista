@@ -8,26 +8,7 @@ final percorsoMotorio = Percorso(id: 'p2', numNodi: 15, nome: 'percorso2', descr
 final percorsoGiocoso = Percorso(id: 'p3', numNodi: 10, nome: 'percorso3', descrizione: 'descrizione', dataInizio: DateTime(2024, 08,20));
 
 
-final List<Bambino> bambiniFinti = [
-  Bambino(
-    id: '100',
-    nome: 'Giacomo',
-    cognome: 'Rossi',
-    dataDiNascita: DateTime(2019, 5, 12),
-    sesso: Sesso.maschio,
-    progressoBambino: 
-      ProgressoPercorso(percorsoId: percorsoEmotivo.id, nodiCompletati: 2),
-    ),
-    Bambino(
-      id: '101',
-      nome: 'Sofia',
-      cognome: 'Verdi',
-      dataDiNascita: DateTime(2020, 05, 12),
-      sesso: Sesso.femmina,
-      progressoBambino: 
-        ProgressoPercorso(percorsoId: percorsoGiocoso.id, nodiCompletati: 9)
-      )
-];
+
 
 Percorso? getPercorsoById(String id) {
   final percorsi = [

@@ -9,6 +9,7 @@ class Bambino{
     final Sesso sesso;
     final ProgressoPercorso? progressoBambino;
     final String? percorsoId;
+    final String? codiceGioco;
 
     Bambino({
       this.id,
@@ -18,6 +19,7 @@ class Bambino{
       required this.sesso,
       this.percorsoId,
       this.progressoBambino,
+      this.codiceGioco,
   });
 
   // 🔹 JSON → Dart
@@ -30,6 +32,7 @@ class Bambino{
       sesso: Sesso.values.firstWhere(
         (e) => e.name == json['sesso'],
       ),
+      codiceGioco: json['codiceGioco'],
     );
   }
 

@@ -27,7 +27,9 @@ class lista_bambiniViewmodel extends ChangeNotifier{
 
   // Aggiunge un nuovo bambino (opzionale)
   void aggiungiBambino(Bambino nuovoBambino) {
+    debugPrint('LISTA PRIMA -> ${bambini.length}');
     _bambini.add(nuovoBambino);
+    debugPrint('LISTA DOPO -> ${bambini.length}');
     notifyListeners();
   }
 

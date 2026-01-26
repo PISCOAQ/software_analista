@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../domain/models/bambino.dart';
 
@@ -13,7 +14,8 @@ class RegistrazioneBambinoService {
     );
 
     if (response.statusCode == 201) {
-      return Bambino.fromJson(jsonDecode(response.body));
+      final map = jsonDecode(response.body);
+      return Bambino.fromJson(map['nuovoBambino']);
     } else{
       throw Exception(
         'Errore creazione bambino: ${response.statusCode} ${response.body}',
