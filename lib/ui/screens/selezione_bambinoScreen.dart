@@ -33,7 +33,7 @@ class _SelezioneBambinoScreenState extends State<SelezioneBambinoScreen> {
                   padding: const EdgeInsets.all(24.0),
                   child: TextField(
                     decoration: const InputDecoration(
-                      hintText: 'Cerca bambino...',
+                      hintText: 'Cerca utente...',
                       prefixIcon: Icon(Icons.search),
                       border: OutlineInputBorder(),
                     ),

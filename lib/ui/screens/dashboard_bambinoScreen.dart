@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:software_analista/datiFinti/dati.dart';
 import 'package:software_analista/domain/enums/extensions_scuola.dart';
 import 'package:software_analista/domain/enums/extensions_titoloStudio.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
 import 'package:software_analista/ui/viewmodels/dashboard_bambinoViewmodel.dart';
 import 'package:software_analista/domain/models/bambino.dart';
-import 'package:software_analista/ui/widgets/grafico_bubble.dart';
-import 'package:software_analista/ui/widgets/grafico_area.dart';
-import 'package:software_analista/ui/widgets/grafico_barre.dart';
 import 'package:software_analista/ui/widgets/grafico_lineare.dart';
-import 'package:software_analista/ui/widgets/grafico_radialBar.dart';
-import 'package:software_analista/ui/widgets/grafico_scatter.dart';
-import 'package:software_analista/ui/widgets/grafico_torta.dart';
 import 'package:software_analista/ui/widgets/Sidebar.dart';
 import 'package:software_analista/ui/widgets/Topbar.dart';
+import 'package:flutter/services.dart'; // per Clipboard
 
 class Dashboard_bambinoScreen extends StatelessWidget {
   final Bambino bambino;
@@ -70,7 +64,7 @@ class Dashboard_bambinoScreen extends StatelessWidget {
 
                               const SizedBox(height: 16),
 
-                              /// DATI BAMBINO (NUOVA SEZIONE)
+                              /// DATI BAMBINO
                               Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -119,11 +113,54 @@ class Dashboard_bambinoScreen extends StatelessWidget {
                                       ],
                                     ),
                                     const SizedBox(height: 12),
+
+                                    // Codice utente con bottone copia
                                     Row(
                                       children: [
-                                        _infoItem(
-                                          label: "Codice utente",
-                                          value: bambino.codiceGioco.toString(),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Codice utente",
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    bambino.codiceGioco.toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      Clipboard.setData(
+                                                          ClipboardData(
+                                                              text: bambino.codiceGioco.toString()));
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                        const SnackBar(
+                                                          content: Text("Codice copiato negli appunti"),
+                                                          duration: Duration(seconds: 1),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: const Icon(
+                                                      Icons.copy,
+                                                      size: 20,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -132,64 +169,77 @@ class Dashboard_bambinoScreen extends StatelessWidget {
                               ),
 
                               const SizedBox(height: 32),
-                              /// 🗂 Tabella test del bambino
+
+                              /// 📌 TABELLA TEST PRE
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: ConstrainedBox(
-                                  constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                                  constraints: BoxConstraints(
+                                      minWidth: MediaQuery.of(context).size.width),
                                   child: DataTable(
-                                    headingRowColor: MaterialStateColor.resolveWith((states) => Colors.black),
-                                    headingTextStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                    headingRowColor: MaterialStateColor.resolveWith(
+                                        (states) => Colors.black),
+                                    headingTextStyle: const TextStyle(
+                                        color: Colors.white, fontWeight: FontWeight.bold),
                                     columnSpacing: 20,
                                     dividerThickness: 1,
                                     columns: const [
-                                      DataColumn(label: Text("Test Pre-Esercitazione")),        // Prima colonna
+                                      DataColumn(
+                                          label: Text("Test Pre-Esercitazione")),
                                       DataColumn(label: Text("Risultato")),
                                       DataColumn(label: Text('Tempo medio di reazione')),
                                       DataColumn(label: Text('Movimento del mouse')),
                                       DataColumn(label: Text('Metodo di interazione'))
                                     ],
                                     rows: List.generate(5, (index) {
-                                      final nomeTestpre= "Test Pre-Esercitazione";
-                                      return DataRow(
-                                        cells: [
-                                          DataCell(
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                              child: Text(
-                                                nomeTestpre,
-                                                style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                                              ),
+                                      final nomeTestpre = "Test Pre-Esercitazione";
+                                      return DataRow(cells: [
+                                        DataCell(
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 4),
+                                            child: Text(
+                                              nomeTestpre,
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                           ),
-                                          DataCell(Text('Risultato')),
-                                          DataCell(Text('Tempo medio di reazione')),
-                                          DataCell(Text('Movimento del mouse')),
-                                          DataCell(Text('Metodo di interazione'))
-                                        ]
-                                      );
+                                        ),
+                                        const DataCell(Text('Risultato')),
+                                        const DataCell(Text('Tempo medio di reazione')),
+                                        const DataCell(Text('Movimento del mouse')),
+                                        const DataCell(Text('Metodo di interazione'))
+                                      ]);
                                     }),
                                     border: TableBorder.symmetric(
-                                      inside: const BorderSide(color: Colors.black, width: 1), // linee tra colonne
-                                      outside: const BorderSide(color: Colors.black, width: 1), // bordo esterno
+                                      inside: const BorderSide(
+                                          color: Colors.black, width: 1),
+                                      outside: const BorderSide(
+                                          color: Colors.black, width: 1),
                                     ),
                                   ),
                                 ),
                               ),
+
                               const SizedBox(height: 32),
 
-                              /// 2 tabella
+                              /// 📌 TABELLA TEST POST
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: ConstrainedBox(
-                                  constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                                  constraints: BoxConstraints(
+                                      minWidth: MediaQuery.of(context).size.width),
                                   child: DataTable(
-                                    headingRowColor: MaterialStateColor.resolveWith((states) => Colors.black),
-                                    headingTextStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                    headingRowColor: MaterialStateColor.resolveWith(
+                                        (states) => Colors.black),
+                                    headingTextStyle: const TextStyle(
+                                        color: Colors.white, fontWeight: FontWeight.bold),
                                     columnSpacing: 20,
                                     dividerThickness: 1,
                                     columns: const [
-                                      DataColumn(label: Text("Test Post-Esercitazione")),        // Prima colonna
+                                      DataColumn(
+                                          label: Text("Test Post-Esercitazione")),
                                       DataColumn(label: Text("Risultato")),
                                       DataColumn(label: Text('Tempo medio di reazione')),
                                       DataColumn(label: Text('Movimento del mouse')),
@@ -197,86 +247,43 @@ class Dashboard_bambinoScreen extends StatelessWidget {
                                     ],
                                     rows: List.generate(5, (index) {
                                       final nomeTestpost = "Test Post-Esercitazione";
-                                      return DataRow(
-                                        cells: [
-                                          DataCell(
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                              child: Text(
-                                                nomeTestpost,
-                                                style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                                              ),
+                                      return DataRow(cells: [
+                                        DataCell(
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 4),
+                                            child: Text(
+                                              nomeTestpost,
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                           ),
-                                          DataCell(Text('Risultato')),
-                                          DataCell(Text('Tempo medio di reazione')),
-                                          DataCell(Text('Movimento del mouse')),
-                                          DataCell(Text('Metodo di interazione'))
-                                        ]
-                                      );
+                                        ),
+                                        const DataCell(Text('Risultato')),
+                                        const DataCell(Text('Tempo medio di reazione')),
+                                        const DataCell(Text('Movimento del mouse')),
+                                        const DataCell(Text('Metodo di interazione'))
+                                      ]);
                                     }),
                                     border: TableBorder.symmetric(
-                                      inside: const BorderSide(color: Colors.black, width: 1), // linee tra colonne
-                                      outside: const BorderSide(color: Colors.black, width: 1), // bordo esterno
+                                      inside: const BorderSide(
+                                          color: Colors.black, width: 1),
+                                      outside: const BorderSide(
+                                          color: Colors.black, width: 1),
                                     ),
                                   ),
                                 ),
                               ),
+
                               const SizedBox(height: 32),
 
+                              /// 📈 GRAFICO LINEARE
                               LineChartWidget(
                                 data: vm.getProgressiChartData(),
                               ),
 
                               const SizedBox(height: 32),
-
-                              /// 📌 RIEPILOGO PERCORSI
-                              const Text(
-                                "Riepilogo Percorsi",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-
-                              Card(
-                                elevation: 2,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      if (bambino.progressoBambino == null)
-                                        const Text(
-                                          "Nessun percorso iniziato",
-                                          style: TextStyle(fontSize: 16),
-                                        )
-                                      else Builder(
-                                        builder: (context) {
-                                          final progresso =
-                                              bambino.progressoBambino!;
-                                          final percorso =
-                                              getPercorsoById(progresso.percorsoId);
-
-                                          if (percorso == null) {
-                                            return const Text(
-                                              "Percorso non trovato",
-                                              style: TextStyle(fontSize: 16),
-                                            );
-                                          }
-
-                                          return Text(
-                                            "• ${percorso.nome} "
-                                            "(${progresso.nodiCompletati}/${percorso.numNodi})",
-                                            style: const TextStyle(fontSize: 16),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         );

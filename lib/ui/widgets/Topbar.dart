@@ -20,7 +20,7 @@ class TopBar extends StatelessWidget {
           Expanded(
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Cerca bambino...',
+                hintText: 'Cerca utente...',
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
                 fillColor: Colors.grey.shade100,

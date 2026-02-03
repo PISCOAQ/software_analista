@@ -21,30 +21,33 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
       backgroundColor: Colors.white,
       body: Row(
         children: [
-          // Sidebar
+          /// SIDEBAR
           Sidebar(),
 
-          // Contenuto principale
+          /// CONTENUTO PRINCIPALE
           Expanded(
             child: Column(
               children: [
-                // TopBar
+                /// TOPBAR
                 TopBar(),
 
-                // Titolo della pagina
+                /// TITOLO
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
                   child: Text(
-                    "Lista Bambini",
-                    style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey.shade800,
+                    "Elenco Utenti",
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
                 ),
 
-                // Azioni di pagina (sotto la topbar)
+                /// AZIONI (BOTTONE)
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
@@ -54,9 +57,20 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton.icon(
-                        icon: const Icon(Icons.person_add),
-                        label: const Text("Aggiungi utente"),
+                        icon: const Icon(
+                          Icons.person_add,
+                          color: Colors.white,
+                        ),
+                        label: const Text(
+                          "Aggiungi utente",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                         style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 12,
@@ -75,11 +89,9 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
                           );
 
                           if (nuovoBambino != null) {
-                            debugPrint('RICEVUTO NUOVO BAMBINO');
                             final vm =
                                 context.read<lista_bambiniViewmodel>();
-                                debugPrint('AGGIUNGO BAMBINO -> ${nuovoBambino.nome}');
-                                vm.aggiungiBambino(nuovoBambino);
+                            vm.aggiungiBambino(nuovoBambino);
                           }
                         },
                       ),
@@ -87,7 +99,7 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
                   ),
                 ),
 
-                // Contenuto della pagina
+                /// CONTENUTO LISTA
                 Expanded(
                   child: _buildContenuto(),
                 ),
@@ -103,36 +115,49 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
     return Consumer<lista_bambiniViewmodel>(
       builder: (context, vm, _) {
         if (vm.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
         if (vm.bambini.isEmpty) {
           return const Center(
             child: Text(
-              "Nessun bambino presente",
+              "Nessun utente presente",
               style: TextStyle(fontSize: 18),
             ),
           );
         }
 
-        return ListView.separated(
-          separatorBuilder: (context, index) => const SizedBox(height: 12),
-          padding: const EdgeInsets.all(16),
-          itemCount: vm.bambini.length,
-          itemBuilder: (context, index) {
-            final bambino = vm.bambini[index];
-            return BambinoCard(
-              bambino: bambino,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => Dashboard_bambinoScreen(bambino: bambino),
-                  ),
+        /// 🔥 LISTA CENTRATA E NON A TUTTA LARGHEZZA
+        return Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 600, // ⬅️ qui regoli la larghezza delle card
+            ),
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              itemCount: vm.bambini.length,
+              separatorBuilder: (_, __) =>
+                  const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                final bambino = vm.bambini[index];
+
+                return BambinoCard(
+                  bambino: bambino,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            Dashboard_bambinoScreen(bambino: bambino),
+                      ),
+                    );
+                  },
                 );
               },
-            );
-          },
+            ),
+          ),
         );
       },
     );

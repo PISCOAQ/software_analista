@@ -1,6 +1,7 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:software_analista/domain/models/bambino.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
+import 'package:software_analista/domain/models/bambino.dart';
 
 class BambinoCard extends StatelessWidget {
   final Bambino bambino;
@@ -16,34 +17,45 @@ class BambinoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(20),
-      elevation: 1.5,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: Colors.black,
+        width: 2,
+        ),
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
-        splashColor: Colors.black.withOpacity(0.1),
+        splashColor: Colors.black.withOpacity(0.08),
+        hoverColor: Colors.black.withOpacity(0.04),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: [
-              // Cerchio iconico del sesso
+              /// ICONA BAMBINO
               Container(
-                width: 48,
-                height: 48,
+                width: 46,
+                height: 46,
                 decoration: BoxDecoration(
                   color: bambino.sesso == Sesso.maschio
-                      ? Colors.blue.shade300
-                      : Colors.pink.shade300,
+    ? Colors.blue.shade400
+    : Colors.pink.shade400,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  bambino.sesso == Sesso.maschio ? Icons.boy : Icons.girl,
-                  size: 26,
+                  bambino.sesso == Sesso.maschio
+                      ? Icons.male
+                      : Icons.female,
+                  size: 24,
                   color: Colors.white,
                 ),
               ),
+
               const SizedBox(width: 16),
-              // Info bambino
+
+              /// INFO
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,24 +67,26 @@ class BambinoCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black87,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       "Età: ${_calcolaEta(bambino.dataDiNascita)} anni",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
-                        color: Colors.black87,
+                        color: Colors.black54,
                       ),
                     ),
                   ],
                 ),
               ),
+
+              /// CHEVRON
               const Icon(
                 Icons.chevron_right,
                 size: 26,
-                color: Colors.black,
+                color: Colors.black54,
               ),
             ],
           ),

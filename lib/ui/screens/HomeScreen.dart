@@ -41,16 +41,16 @@ class HomeScreen extends StatelessWidget {
                                   mainAxisSpacing: 24,
                                   children: [
                                     DataCard(
-                                      icon: Icons.child_care,
-                                      title: 'Bambini',
+                                      icon: Icons.person,
+                                      title: 'Utenti registrati',
                                       value: vm.numeroBambini.toString(),
-                                      color: Colors.blue,
+                                      color: Colors.green,
                                     ),
                                     DataCard(
                                       icon: Icons.male,
                                       title: 'Maschi',
                                       value: vm.numeroMaschi.toString(),
-                                      color: Colors.green,
+                                      color: Colors.blue,
                                     ),
                                     DataCard(
                                       icon: Icons.female,
