@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:software_analista/data/repository/registrazione_bambiniRepository.dart';
+import 'package:software_analista/domain/enums/scuola.dart';
+import 'package:software_analista/domain/enums/titoloStudio.dart';
 import 'package:software_analista/domain/models/bambino.dart';
 import 'package:software_analista/domain/models/percorso.dart';
-import 'package:software_analista/domain/models/sesso.dart';
+import 'package:software_analista/domain/enums/sesso.dart';
 
 class Registrazionebambino_Viewmodel extends ChangeNotifier{
   String nome = '';
   String cognome = '';
   DateTime? dataNascita;
   Sesso sesso = Sesso.maschio;
+  String? email;
+  String? telefono;
+  Scuole? scuolaFrequentata;
+  TitoloStudio? titoloStudio;
   Percorso? percorso;
   bool isLoading = true;
   String? errorMessage;
@@ -25,6 +31,10 @@ class Registrazionebambino_Viewmodel extends ChangeNotifier{
     cognome = '';
     sesso = Sesso.maschio;
     dataNascita = null;
+    email = null;
+    telefono = null;
+    scuolaFrequentata = null;
+    titoloStudio = null;
     errorMessage = null;
 
     notifyListeners();
@@ -46,14 +56,64 @@ class Registrazionebambino_Viewmodel extends ChangeNotifier{
     sesso = value!;
     notifyListeners();
   }
+   void updateEmail(String? value) {
+    email = value;
+    notifyListeners();
+  }
+
+  void updateTelefono(String? value) {
+    telefono = value;
+    notifyListeners();
+  }
+  void updateScuola(Scuole? value){
+    if(value != null){
+      scuolaFrequentata = value;
+      notifyListeners();
+    }
+  }
+  void updateTitolo(TitoloStudio? value){
+    if(value != null){
+      titoloStudio = value;
+      notifyListeners();
+    }
+  }
+
+  // -----------------------------
+  // VALIDAZIONE
+  // -----------------------------
+  bool _validateEmail(String? email) {
+    if (email == null || email.isEmpty) return true; // opzionale
+    final regex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return regex.hasMatch(email);
+  }
+
+  bool _validateTelefono(String? telefono) {
+    if (telefono == null || telefono.isEmpty) return true; // opzionale
+    final regex = RegExp(r'^\+?\d{7,15}$'); // accetta numeri con eventuale +
+    return regex.hasMatch(telefono);
+  }
 
 
   Future<Bambino?> registraBambino() async {
-    if (nome.isEmpty || cognome.isEmpty || dataNascita == null) {
+    if (nome.isEmpty || cognome.isEmpty || dataNascita == null || scuolaFrequentata == null || titoloStudio == null) {
       errorMessage = 'Compila tutti i campi obbligatori';
       notifyListeners();
       return null;
     }
+
+    if (!_validateEmail(email)) {
+      errorMessage = 'Email non valida';
+      notifyListeners();
+      return null;
+    }
+
+    if (!_validateTelefono(telefono)) {
+      errorMessage = 'Numero di telefono non valido';
+      notifyListeners();
+      return null;
+    }
+
+
     isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -64,6 +124,10 @@ class Registrazionebambino_Viewmodel extends ChangeNotifier{
         cognome: cognome,
         dataDiNascita: dataNascita!,
         sesso: sesso,
+        email: email,
+        numTelefono: telefono,
+        scuolaFrequentata: scuolaFrequentata!,
+        titoloStudio: titoloStudio!,
         codiceGioco: null,
       );
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:software_analista/data/repository/lista_bambiniRepository.dart';
 import 'package:software_analista/data/service/lista_bambiniService.dart';
 import 'package:software_analista/domain/models/bambino.dart';
-import 'package:software_analista/domain/models/sesso.dart';
+import 'package:software_analista/domain/enums/sesso.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final ListaBambiniRepository _bambiniRepository = ListaBambiniRepository(ListaBambiniService());

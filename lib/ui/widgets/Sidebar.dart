@@ -10,7 +10,15 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 200,
-      color: Colors.white,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          right: BorderSide(
+            color: Colors.black,
+            width: 2.5, // 👈 linea di separazione
+          ),
+        ),
+      ),
       child: Column(
         children: [
           const SizedBox(height: 32),
@@ -19,24 +27,25 @@ class Sidebar extends StatelessWidget {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 40),
+
           SidebarItem(
             icon: Icons.home,
             label: 'Home',
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => HomeScreen())
-                );
+                MaterialPageRoute(builder: (_) => HomeScreen()),
+              );
             },
-            ),
+          ),
           SidebarItem(
-            icon: Icons.face,
-            label: 'Bambini',
+            icon: Icons.person,
+            label: 'Utenti',
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => Lista_bambiniScreen())
-                );
+                MaterialPageRoute(builder: (_) => Lista_bambiniScreen()),
+              );
             },
           ),
           SidebarItem(
@@ -45,8 +54,8 @@ class Sidebar extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => Lista_percorsiScreen())
-                );
+                MaterialPageRoute(builder: (_) => Lista_percorsiScreen()),
+              );
             },
           ),
           SidebarItem(
@@ -55,16 +64,14 @@ class Sidebar extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => SelezioneBambinoScreen())
-                );
+                MaterialPageRoute(builder: (_) => SelezioneBambinoScreen()),
+              );
             },
-          
           ),
-          
           SidebarItem(
             icon: Icons.settings,
             label: 'Impostazioni',
-            ),
+          ),
         ],
       ),
     );

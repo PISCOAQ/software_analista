@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:software_analista/data/repository/registrazione_bambiniRepository.dart';
 import 'package:software_analista/data/service/registrazione_bambiniService.dart';
+import 'package:software_analista/domain/enums/extensions_scuola.dart';
+import 'package:software_analista/domain/enums/extensions_titoloStudio.dart';
+import 'package:software_analista/domain/enums/scuola.dart';
+import 'package:software_analista/domain/enums/titoloStudio.dart';
 import 'package:software_analista/domain/models/bambino.dart';
-import 'package:software_analista/ui/screens/lista_bambiniScreen.dart';
 import 'package:software_analista/ui/viewmodels/registrazioneBambino_Viewmodel.dart';
-import 'package:software_analista/domain/models/sesso.dart';
+import 'package:software_analista/domain/enums/sesso.dart';
 import 'package:software_analista/ui/widgets/Sidebar.dart';
 import 'package:software_analista/ui/widgets/Topbar.dart';
 import 'package:flutter/services.dart';
@@ -22,131 +25,291 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
         ),
       ),
       child: Scaffold(
-        backgroundColor: Colors.grey.shade100,
+        backgroundColor: Colors.white,
         body: Row(
           children: [
             Sidebar(),
 
-            // Contenuto principale
             Expanded(
               child: Column(
                 children: [
                   TopBar(),
 
-                  // Titolo della pagina
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 12),
                     child: Text(
-                      "Registrazione nuovo bambino",
+                      "Registrazione nuovo utente",
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade800,
+                        color: Colors.black,
                       ),
                     ),
                   ),
 
-                  // Contenuto centrale
                   Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(24),
-                      child: Consumer<Registrazionebambino_Viewmodel>(
-                        builder: (context, vm, _) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextField(
-                                decoration: const InputDecoration(
-                                  labelText: 'Nome',
-                                ),
-                                onChanged: vm.updateNome,
-                              ),
-                              const SizedBox(height: 12),
-
-                              TextField(
-                                decoration: const InputDecoration(
-                                  labelText: 'Cognome',
-                                ),
-                                onChanged: vm.updateCognome,
-                              ),
-                              const SizedBox(height: 12),
-
-                              DropdownButtonFormField<Sesso>(
-                                decoration: const InputDecoration(
-                                  labelText: 'Sesso',
-                                ),
-                                value: vm.sesso,
-                                items: Sesso.values.map((s) {
-                                  return DropdownMenuItem(
-                                    value: s,
-                                    child: Text(s.name),
-                                  );
-                                }).toList(),
-                                onChanged: vm.updateSesso,
-                              ),
-                              const SizedBox(height: 24),
-
-                              /// 📅 DATA DI NASCITA
-                              InkWell(
-                                onTap: () async {
-                                  final pickedDate = await showDatePicker(
-                                    context: context,
-                                    initialDate:
-                                        vm.dataNascita ?? DateTime.now(),
-                                    firstDate: DateTime(2000),
-                                    lastDate: DateTime.now(),
-                                  );
-
-                                  if (pickedDate != null) {
-                                    vm.updateDataNascita(pickedDate);
-                                  }
-                                },
-                                child: InputDecorator(
-                                  decoration: const InputDecoration(
-                                    labelText: 'Data di nascita',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  child: Text(
-                                    vm.dataNascita != null
-                                        ? '${vm.dataNascita!.day}/${vm.dataNascita!.month}/${vm.dataNascita!.year}'
-                                        : 'Seleziona una data',
-                                    style: TextStyle(
-                                      color: vm.dataNascita != null
-                                          ? Colors.black
-                                          : Colors.grey,
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        inputDecorationTheme: InputDecorationTheme(
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelStyle:
+                              const TextStyle(color: Colors.black),
+                          contentPadding:
+                              const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(8),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 1.5,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(8),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 1.5,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(8),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                        elevatedButtonTheme:
+                            ElevatedButtonThemeData(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            foregroundColor: Colors.white,
+                            padding:
+                                const EdgeInsets.symmetric(
+                                    vertical: 14),
+                            textStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            shape:
+                                RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(24),
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: 520, // 👈 larghezza form
+                            ),
+                            child: Consumer<
+                                Registrazionebambino_Viewmodel>(
+                              builder: (context, vm, _) {
+                                return Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    TextField(
+                                      decoration:
+                                          const InputDecoration(
+                                        labelText: 'Nome',
+                                      ),
+                                      onChanged:
+                                          vm.updateNome,
                                     ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 24),
+                                    const SizedBox(height: 12),
 
-                              /// 🔴 Messaggio di errore
-                              if (vm.errorMessage != null)
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: Text(
-                                    vm.errorMessage!,
-                                    style: const TextStyle(color: Colors.red),
-                                  ),
-                                ),
+                                    TextField(
+                                      decoration:
+                                          const InputDecoration(
+                                        labelText: 'Cognome',
+                                      ),
+                                      onChanged:
+                                          vm.updateCognome,
+                                    ),
+                                    const SizedBox(height: 12),
 
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    final nuovoBambino = await vm.registraBambino();
-                                    if (nuovoBambino != null) {
-                                      final bambinoDaRitornare = await _showSuccessDialog(context, nuovoBambino);
-                                      Navigator.pop(context, bambinoDaRitornare);
-                                    }
-                                  },
-                                  child: const Text('Registra'),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+                                    DropdownButtonFormField<
+                                        Sesso>(
+                                      decoration:
+                                          const InputDecoration(
+                                        labelText: 'Sesso',
+                                      ),
+                                      value: vm.sesso,
+                                      items: Sesso.values
+                                          .map((s) {
+                                        return DropdownMenuItem(
+                                          value: s,
+                                          child:
+                                              Text(s.name),
+                                        );
+                                      }).toList(),
+                                      onChanged:
+                                          vm.updateSesso,
+                                    ),
+                                    const SizedBox(height: 24),
+
+                                    InkWell(
+                                      onTap: () async {
+                                        final pickedDate =
+                                            await showDatePicker(
+                                          context: context,
+                                          initialDate:
+                                              vm.dataNascita ??
+                                                  DateTime.now(),
+                                          firstDate:
+                                              DateTime(2000),
+                                          lastDate:
+                                              DateTime.now(),
+                                        );
+
+                                        if (pickedDate !=
+                                            null) {
+                                          vm.updateDataNascita(
+                                              pickedDate);
+                                        }
+                                      },
+                                      child: InputDecorator(
+                                        decoration:
+                                            const InputDecoration(
+                                          labelText:
+                                              'Data di nascita',
+                                        ),
+                                        child: Text(
+                                          vm.dataNascita !=
+                                                  null
+                                              ? '${vm.dataNascita!.day}/${vm.dataNascita!.month}/${vm.dataNascita!.year}'
+                                              : 'Seleziona una data',
+                                          style: TextStyle(
+                                            color: vm.dataNascita !=
+                                                    null
+                                                ? Colors.black
+                                                : Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+
+                                    TextField(
+                                      decoration:
+                                          const InputDecoration(
+                                        labelText: 'Email',
+                                      ),
+                                      onChanged:
+                                          vm.updateEmail,
+                                    ),
+                                    const SizedBox(height: 12),
+
+                                    TextField(
+                                      decoration:
+                                          const InputDecoration(
+                                        labelText:
+                                            'Numero di telefono',
+                                      ),
+                                      onChanged:
+                                          vm.updateTelefono,
+                                    ),
+                                    const SizedBox(height: 12),
+
+                                    DropdownButtonFormField<
+                                        Scuole>(
+                                      decoration:
+                                          const InputDecoration(
+                                        labelText:
+                                            'Scuola frequentata',
+                                      ),
+                                      value:
+                                          vm.scuolaFrequentata,
+                                      items: Scuole.values
+                                          .map((sc) {
+                                        return DropdownMenuItem(
+                                          value: sc,
+                                          child:
+                                              Text(sc.label),
+                                        );
+                                      }).toList(),
+                                      onChanged:
+                                          vm.updateScuola,
+                                    ),
+                                    const SizedBox(height: 24),
+
+                                    DropdownButtonFormField<
+                                        TitoloStudio>(
+                                      decoration:
+                                          const InputDecoration(
+                                        labelText:
+                                            'Titolo di studio',
+                                      ),
+                                      value:
+                                          vm.titoloStudio,
+                                      items: TitoloStudio
+                                          .values
+                                          .map((t) {
+                                        return DropdownMenuItem(
+                                          value: t,
+                                          child:
+                                              Text(t.label),
+                                        );
+                                      }).toList(),
+                                      onChanged:
+                                          vm.updateTitolo,
+                                    ),
+                                    const SizedBox(height: 24),
+
+                                    if (vm.errorMessage !=
+                                        null)
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets
+                                                .only(
+                                                bottom: 12),
+                                        child: Text(
+                                          vm.errorMessage!,
+                                          style:
+                                              const TextStyle(
+                                                  color:
+                                                      Colors
+                                                          .red),
+                                        ),
+                                      ),
+
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        final nuovoBambino =
+                                            await vm
+                                                .registraBambino();
+                                        if (nuovoBambino !=
+                                            null) {
+                                          final bambinoDaRitornare =
+                                              await _showSuccessDialog(
+                                                  context,
+                                                  nuovoBambino);
+                                          Navigator.pop(
+                                              context,
+                                              bambinoDaRitornare);
+                                        }
+                                      },
+                                      child: const Text(
+                                          'Registra'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -159,15 +322,18 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
     );
   }
 
-  Future <Bambino?> _showSuccessDialog(BuildContext context, Bambino bambino) {
-    return showDialog<Bambino>( 
+  Future<Bambino?> _showSuccessDialog(
+      BuildContext context, Bambino bambino) {
+    return showDialog<Bambino>(
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        title: const Text('Registrazione completata 🎉'),
+        title:
+            const Text('Registrazione completata 🎉'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
           children: [
             const Text('Codice gioco:'),
             const SizedBox(height: 8),
@@ -184,10 +350,14 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
           ElevatedButton.icon(
             onPressed: () {
               Clipboard.setData(
-                ClipboardData(text: bambino.codiceGioco!),
+                ClipboardData(
+                    text: bambino.codiceGioco!),
               );
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Codice copiato negli appunti')),
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(
+                const SnackBar(
+                    content: Text(
+                        'Codice copiato negli appunti')),
               );
             },
             icon: const Icon(Icons.copy),
@@ -195,8 +365,9 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              debugPrint('CHIUDO DIALOG E RITORNO BAMBINO');
-              Navigator.of(context, rootNavigator: true).pop(bambino);
+              Navigator.of(context,
+                      rootNavigator: true)
+                  .pop(bambino);
             },
             child: const Text('Chiudi'),
           ),

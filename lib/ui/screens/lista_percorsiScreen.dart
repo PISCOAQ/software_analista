@@ -16,7 +16,7 @@ class _Lista_percorsiScreenState extends State<Lista_percorsiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Colors.white,
       body: Row(
         children: [
           // Sidebar

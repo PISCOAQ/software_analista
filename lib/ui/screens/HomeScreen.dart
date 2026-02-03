@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
       child: Consumer<HomeViewModel>(
         builder: (context, vm, _) {
           return Scaffold(
-            backgroundColor: Colors.grey.shade100,
+            backgroundColor: Colors.white,
             body: Row(
               children: [
                 // Sidebar fissa

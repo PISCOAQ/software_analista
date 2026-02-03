@@ -34,7 +34,7 @@ class SidebarItem extends StatelessWidget {
               icon,
               color: isSelected
                   ? Theme.of(context).primaryColor
-                  : Colors.grey,
+                  : Colors.black,
             ),
             const SizedBox(width: 12),
             Text(
@@ -42,7 +42,7 @@ class SidebarItem extends StatelessWidget {
               style: TextStyle(
                 color: isSelected
                     ? Theme.of(context).primaryColor
-                    : Colors.grey.shade700,
+                    : Colors.black,
                 fontWeight:
                     isSelected ? FontWeight.w600 : FontWeight.normal,
               ),

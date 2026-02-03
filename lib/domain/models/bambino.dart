@@ -1,5 +1,9 @@
+import 'package:software_analista/domain/enums/extensions_scuola.dart';
+import 'package:software_analista/domain/enums/extensions_titoloStudio.dart';
+import 'package:software_analista/domain/enums/scuola.dart';
+import 'package:software_analista/domain/enums/titoloStudio.dart';
 import 'package:software_analista/domain/models/progressoPercorso.dart';
-import 'package:software_analista/domain/models/sesso.dart';
+import 'package:software_analista/domain/enums/sesso.dart';
 
 class Bambino{
     final String? id;
@@ -7,6 +11,10 @@ class Bambino{
     final String cognome;
     final DateTime dataDiNascita;
     final Sesso sesso;
+    final String? email;
+    final String? numTelefono;
+    final Scuole scuolaFrequentata;
+    final TitoloStudio titoloStudio;
     final ProgressoPercorso? progressoBambino;
     final String? percorsoId;
     final String? codiceGioco;
@@ -17,6 +25,10 @@ class Bambino{
       required this.cognome,
       required this.dataDiNascita,
       required this.sesso,
+      this.email,
+      this.numTelefono,
+      required this.scuolaFrequentata,
+      required this.titoloStudio,
       this.percorsoId,
       this.progressoBambino,
       this.codiceGioco,
@@ -32,6 +44,10 @@ class Bambino{
       sesso: Sesso.values.firstWhere(
         (e) => e.name == json['sesso'],
       ),
+      email: json['email'],
+      numTelefono: json ['telefono'],
+      scuolaFrequentata: ScuolaExtension.fromApiValue(json['scuolaFrequentata']),
+      titoloStudio: TitoloStudioExtension.fromApiValue(json['titoloStudio']),
       codiceGioco: json['codiceGioco'],
     );
   }
@@ -43,6 +59,10 @@ class Bambino{
       'cognome': cognome,
       'dataNascita': dataDiNascita.toIso8601String(),
       'sesso': sesso.name,
+      'email': email,
+      'telefono':numTelefono,
+      'scuolaFrequentata':scuolaFrequentata.name,
+      'titoloStudio': titoloStudio.name,
     };
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:software_analista/domain/models/bambino.dart';
-import 'package:software_analista/domain/models/sesso.dart';
+import 'package:software_analista/domain/enums/sesso.dart';
 
 class BambinoCard extends StatelessWidget {
   final Bambino bambino;

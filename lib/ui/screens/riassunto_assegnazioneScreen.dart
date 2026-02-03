@@ -19,6 +19,7 @@ class AssegnazioneRiassuntoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Row(
         children: [
           Sidebar(),

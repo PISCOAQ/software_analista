@@ -6,14 +6,22 @@ class TopBar extends StatelessWidget {
     return Container(
       height: 64,
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      color: Colors.white,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.black,
+            width: 1.5, // 👈 linea di separazione
+          ),
+        ),
+      ),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Cerca bambino...',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 filled: true,
                 fillColor: Colors.grey.shade100,
                 border: OutlineInputBorder(
@@ -25,11 +33,11 @@ class TopBar extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           IconButton(
-            icon: Icon(Icons.notifications_none),
+            icon: const Icon(Icons.notifications_none),
             onPressed: () {},
           ),
           const SizedBox(width: 16),
-          CircleAvatar(
+          const CircleAvatar(
             backgroundImage: NetworkImage('url_avatar'),
           ),
         ],

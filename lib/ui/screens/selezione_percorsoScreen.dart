@@ -23,6 +23,7 @@ class _SelezionePercorsoScreenState extends State<SelezionePercorsoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Row(
         children: [
           Sidebar(),

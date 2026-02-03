@@ -21,6 +21,7 @@ class _SelezioneBambinoScreenState extends State<SelezioneBambinoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Row(
         children: [
           Sidebar(),
