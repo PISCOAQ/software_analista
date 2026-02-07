@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:software_analista/data/service/dashboard_bambinoService.dart';
 import 'package:software_analista/ui/screens/dashboard_bambinoScreen.dart';
 import 'package:software_analista/ui/screens/registrazione_bambinoScreen.dart';
 import 'package:software_analista/ui/viewmodels/lista_bambiniViewmodel.dart';
 import 'package:software_analista/ui/widgets/BambinoCard.dart';
 import 'package:software_analista/ui/widgets/Sidebar.dart';
 import 'package:software_analista/ui/widgets/Topbar.dart';
+import 'package:software_analista/data/repository/dashboard_bambinoRepository.dart';
 
 class Lista_bambiniScreen extends StatefulWidget {
   const Lista_bambiniScreen({super.key});
@@ -146,11 +148,12 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
                 return BambinoCard(
                   bambino: bambino,
                   onTap: () {
+                    final testService = Dashboard_bambinoService();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) =>
-                            Dashboard_bambinoScreen(bambino: bambino),
+                            Dashboard_bambinoScreen(bambino: bambino, repository: DashboardBambinorepository(testService),),
                       ),
                     );
                   },

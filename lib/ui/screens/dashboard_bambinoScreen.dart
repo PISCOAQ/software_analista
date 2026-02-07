@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:software_analista/data/repository/dashboard_bambinoRepository.dart';
 import 'package:software_analista/domain/enums/extensions_scuola.dart';
 import 'package:software_analista/domain/enums/extensions_titoloStudio.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
@@ -8,20 +9,43 @@ import 'package:software_analista/domain/models/bambino.dart';
 import 'package:software_analista/ui/widgets/grafico_lineare.dart';
 import 'package:software_analista/ui/widgets/Sidebar.dart';
 import 'package:software_analista/ui/widgets/Topbar.dart';
-import 'package:flutter/services.dart'; // per Clipboard
+import 'package:flutter/services.dart';
 
-class Dashboard_bambinoScreen extends StatelessWidget {
+class Dashboard_bambinoScreen extends StatefulWidget {
   final Bambino bambino;
+  final DashboardBambinorepository repository;
 
   const Dashboard_bambinoScreen({
     super.key,
     required this.bambino,
+    required this.repository
   });
 
   @override
+  State<Dashboard_bambinoScreen> createState() => _Dashboard_bambinoScreenState();
+}
+
+class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
+  late DashboardBambinoViewModel _vm;
+
+  @override
+  void initState(){
+    super.initState();
+
+    _vm = DashboardBambinoViewModel(
+      bambino: widget.bambino,
+      repository: widget.repository,
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _vm.initialize();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => dashboard_bambinoViewModel(bambino: bambino),
+    return ChangeNotifierProvider.value(
+      value: _vm,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Row(
@@ -38,7 +62,7 @@ class Dashboard_bambinoScreen extends StatelessWidget {
 
                   /// CONTENUTO DASHBOARD
                   Expanded(
-                    child: Consumer<dashboard_bambinoViewModel>(
+                    child: Consumer<DashboardBambinoViewModel>(
                       builder: (context, vm, _) {
                         if (vm.isLoading) {
                           return const Center(
@@ -191,27 +215,23 @@ class Dashboard_bambinoScreen extends StatelessWidget {
                                       DataColumn(label: Text('Movimento del mouse')),
                                       DataColumn(label: Text('Metodo di interazione'))
                                     ],
-                                    rows: List.generate(5, (index) {
-                                      final nomeTestpre = "Test Pre-Esercitazione";
-                                      return DataRow(cells: [
-                                        DataCell(
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 4),
-                                            child: Text(
-                                              nomeTestpre,
+                                    rows: vm.tests.map((test) {
+                                      return DataRow(
+                                        cells: [
+                                          DataCell(
+                                            Text(
+                                              test.nome,
                                               style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold),
+                                                fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        const DataCell(Text('Risultato')),
-                                        const DataCell(Text('Tempo medio di reazione')),
+                                          DataCell(Text('${test.domandeCorrette.toStringAsFixed(2)} / ${test.domandeTotali.toStringAsFixed(2)}')),
+                                          DataCell(Text("${test.tempoMedioReazione.toStringAsFixed(2)} ms"),),
                                         const DataCell(Text('Movimento del mouse')),
                                         const DataCell(Text('Metodo di interazione'))
                                       ]);
-                                    }),
+                                    }).toList(),
                                     border: TableBorder.symmetric(
                                       inside: const BorderSide(
                                           color: Colors.black, width: 1),
@@ -245,27 +265,23 @@ class Dashboard_bambinoScreen extends StatelessWidget {
                                       DataColumn(label: Text('Movimento del mouse')),
                                       DataColumn(label: Text('Metodo di interazione'))
                                     ],
-                                    rows: List.generate(5, (index) {
-                                      final nomeTestpost = "Test Post-Esercitazione";
-                                      return DataRow(cells: [
-                                        DataCell(
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 4),
-                                            child: Text(
-                                              nomeTestpost,
+                                    rows: vm.tests.map((test) {
+                                      return DataRow(
+                                        cells: [
+                                          DataCell(
+                                            Text(
+                                              test.nome,
                                               style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold),
+                                                fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        const DataCell(Text('Risultato')),
-                                        const DataCell(Text('Tempo medio di reazione')),
+                                          DataCell(Text('${test.domandeCorrette.toStringAsFixed(2)} / ${test.domandeTotali.toStringAsFixed(2)}')),
+                                          DataCell(Text("${test.tempoMedioReazione.toStringAsFixed(2)} ms"),),
                                         const DataCell(Text('Movimento del mouse')),
                                         const DataCell(Text('Metodo di interazione'))
                                       ]);
-                                    }),
+                                    }).toList(),
                                     border: TableBorder.symmetric(
                                       inside: const BorderSide(
                                           color: Colors.black, width: 1),

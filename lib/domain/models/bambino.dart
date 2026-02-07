@@ -16,7 +16,7 @@ class Bambino{
     final Scuole scuolaFrequentata;
     final TitoloStudio titoloStudio;
     final ProgressoPercorso? progressoBambino;
-    final String? percorsoId;
+    final List<ProgressoPercorso>? percorsiAssegnati;
     final String? codiceGioco;
 
     Bambino({
@@ -29,8 +29,8 @@ class Bambino{
       this.numTelefono,
       required this.scuolaFrequentata,
       required this.titoloStudio,
-      this.percorsoId,
       this.progressoBambino,
+      this.percorsiAssegnati,
       this.codiceGioco,
   });
 

@@ -1,70 +1,74 @@
-import 'package:flutter/widgets.dart';
-import 'package:software_analista/datiFinti/dati.dart';
+import 'package:flutter/foundation.dart';
+import 'package:software_analista/data/repository/dashboard_bambinoRepository.dart';
 import 'package:software_analista/domain/models/bambino.dart';
-import 'package:software_analista/domain/models/progressoPercorso.dart';
+import 'package:software_analista/domain/models/risultatoTest.dart';
 
-class dashboard_bambinoViewModel extends ChangeNotifier {
-  Bambino _bambino;
+class DashboardBambinoViewModel extends ChangeNotifier {
+  final Bambino _bambino;
   bool _isLoading = true;
+  final DashboardBambinorepository _repository;
+  List<Test> _tests = []; /// tutti i test del bambino
 
-  dashboard_bambinoViewModel({required Bambino bambino}) : _bambino = bambino {
-    _init();
-  }
+  DashboardBambinoViewModel({
+    required Bambino bambino,
+    required DashboardBambinorepository repository
+    }) : _bambino = bambino,
+          _repository = repository;
+  
+
+  // ===============================
+  // GETTERS
+  // ===============================
 
   Bambino get bambino => _bambino;
-  ProgressoPercorso? get progresso => _bambino.progressoBambino;
   bool get isLoading => _isLoading;
+  List<Test> get tests => _tests;
 
-  set isLoading(bool value) {
+  // ===============================
+  // INIT
+  // ===============================
+
+  Future<void> initialize() async {
+    _setLoading(true);
+
+    try {
+      // Carica tutti i test del bambino dalla repository
+      _tests = await _repository.getTestByBambino(_bambino.codiceGioco);
+    } catch (e) {
+      print("Errore caricamento test: $e");
+      _tests = [];
+    }
+
+    _setLoading(false);
+  }
+
+  Future<void> reloadTests() async {
+    _setLoading(true);
+    _tests = await _repository.getTestByBambino(_bambino.codiceGioco);
+    _setLoading(false);
+  }
+
+  List<Map<String, dynamic>> getProgressiChartData() {
+  if (_tests.isEmpty) return [];
+
+  return _tests.map((test) {
+    return {
+      /// ASSE X → nome del livello del percorso
+      'test': test.nome,
+
+      /// ASSE Y → punteggio ottenuto in quel livello
+      'punteggio': test.domandeCorrette,
+    };
+  }).toList();
+}
+
+
+  // ===============================
+  // UTILS
+  // ===============================
+
+  void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
-  }
-
-  Future<void> _init() async {
-    isLoading = true;
-    await Future.delayed(const Duration(milliseconds: 300)); // Simula caricamento
-    isLoading = false;
-  }
-
-  Future<void> loadBambino(Bambino b) async {
-    isLoading = true;
-    await Future.delayed(const Duration(milliseconds: 300));
-    _bambino = b;
-    isLoading = false;
-  }
-
-  /*void aggiornaNodiCompletati(int nodiCompletati) {
-    final p = _bambino.progressoBambino;
-    if (p != null) {
-      _bambino.progressoBambino = ProgressoPercorso(
-        percorsoId: p.percorsoId,
-        nodiCompletati: nodiCompletati,
-      );
-      notifyListeners();
-    }
-  }*/
-
-  double percentualeCompletata({int totaleNodi = 10}) {
-    final p = _bambino.progressoBambino;
-    if (p == null || totaleNodi == 0) return 0.0;
-    return (p.nodiCompletati / totaleNodi) * 100;
-  }
-
-  List<Map<String, dynamic>> getProgressiChartData({int totaleNodi = 10}) {
-    final p = _bambino.progressoBambino;
-    if (p == null) return [];
-
-    final percorso = getPercorsoById(p.percorsoId);
-    if (percorso == null) return [];
-
-
-    final percentuale = (totaleNodi > 0) ? (p.nodiCompletati / totaleNodi) * 100 : 0.0;
-
-    return [
-      {
-        "percorso": percorso.nome,
-        "percentuale": percentuale,
-      }
-    ];
   }
 }
