@@ -1,4 +1,6 @@
 import 'package:software_analista/data/service/dashboard_bambinoService.dart';
+import 'package:software_analista/domain/models/bambino.dart';
+import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
 
 class DashboardBambinorepository {
@@ -10,5 +12,11 @@ class DashboardBambinorepository {
     return service.getTestByBambino(codiceGioco);
   }
 
+  Future<Bambino> salvaDiagnosi(String? bambinoId, Diagnosi diagnosi){
+    return service.salvaDiagnosi(bambinoId, diagnosi);
+  }
 
+  Future<Bambino> eliminaDiagnosi(String? bambinoId){
+    return service.eliminaDiagnosi(bambinoId);
+  }
 }

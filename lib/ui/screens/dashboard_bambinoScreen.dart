@@ -4,8 +4,10 @@ import 'package:software_analista/data/repository/dashboard_bambinoRepository.da
 import 'package:software_analista/domain/enums/extensions_scuola.dart';
 import 'package:software_analista/domain/enums/extensions_titoloStudio.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
+import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/ui/viewmodels/dashboard_bambinoViewmodel.dart';
 import 'package:software_analista/domain/models/bambino.dart';
+import 'package:software_analista/ui/widgets/DialogDiagnosi.dart';
 import 'package:software_analista/ui/widgets/grafico_lineare.dart';
 import 'package:software_analista/ui/widgets/Sidebar.dart';
 import 'package:software_analista/ui/widgets/Topbar.dart';
@@ -298,6 +300,126 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                               LineChartWidget(
                                 data: vm.getProgressiChartData(),
                               ),
+
+                              /// 📌 SEZIONE DIAGNOSI
+                              const SizedBox(height: 32),
+                              Consumer<DashboardBambinoViewModel>(
+                                builder: (context, vm, _) {
+                                  final diagnosi = vm.bambino.diagnosi;
+                                  if (diagnosi == null) {                  // Stato: nessuna diagnosi
+                                    return Center(
+                                      child: ElevatedButton.icon(
+                                        icon: const Icon(Icons.add),
+                                        label: const Text("Inserisci Diagnosi"),
+                                        onPressed: () async {
+                                          final nuovaDiagnosi = await showDialog<Diagnosi>(
+                                            context: context,
+                                            builder: (_) => DiagnosiDialog(),
+                                          );
+                                          if (nuovaDiagnosi != null) {
+                                            await vm.inserisciDiagnosi(nuovaDiagnosi);
+                                          }
+                                        },
+                                      ),
+                                    );
+                                  } else {                                 // Stato: diagnosi presente
+                                      return Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(20),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.black, width: 2),
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.grey.shade100,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "Diagnosi",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Text(
+                                              diagnosi.testo,
+                                              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "Gravità: ${diagnosi.livelloGravita.name}",
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+            if (diagnosi.note != null && diagnosi.note!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(
+                  "Note: ${diagnosi.note}",
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ),
+            const SizedBox(height: 8),
+            Text(
+              "Inserita il: ${_formatDate(diagnosi.dataInserimento)}",
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.edit),
+                  label: const Text("Modifica"),
+                  onPressed: () async {
+                    final modificata = await showDialog<Diagnosi>(
+                      context: context,
+                      builder: (_) => DiagnosiDialog(diagnosi: diagnosi),
+                    );
+                    if (modificata != null) {
+                      await vm.modificaDiagnosi(modificata);
+                    }
+                  },
+                ),
+                const SizedBox(width: 12),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.delete),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
+                  label: const Text("Elimina"),
+                  onPressed: () async {
+                    final conferma = await showDialog<bool>(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: const Text("Conferma eliminazione"),
+                        content: const Text("Sei sicuro di voler eliminare la diagnosi?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: const Text("Annulla"),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: const Text("Elimina"),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (conferma == true) {
+                      await vm.eliminaDiagnosi();
+                    }
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+  },
+),
+const SizedBox(height: 32),
+
 
                               const SizedBox(height: 32),
                             ],

@@ -2,6 +2,8 @@ import 'package:software_analista/domain/enums/extensions_scuola.dart';
 import 'package:software_analista/domain/enums/extensions_titoloStudio.dart';
 import 'package:software_analista/domain/enums/scuola.dart';
 import 'package:software_analista/domain/enums/titoloStudio.dart';
+import 'package:software_analista/domain/models/diagnosi.dart';
+import 'package:software_analista/domain/models/percorsoAssegnato.dart';
 import 'package:software_analista/domain/models/progressoPercorso.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
 
@@ -16,8 +18,9 @@ class Bambino{
     final Scuole scuolaFrequentata;
     final TitoloStudio titoloStudio;
     final ProgressoPercorso? progressoBambino;
-    final List<ProgressoPercorso>? percorsiAssegnati;
+    final List<PercorsoAssegnato>? percorsiAssegnati;
     final String? codiceGioco;
+    final Diagnosi? diagnosi;
 
     Bambino({
       this.id,
@@ -32,6 +35,7 @@ class Bambino{
       this.progressoBambino,
       this.percorsiAssegnati,
       this.codiceGioco,
+      this.diagnosi,
   });
 
   // 🔹 JSON → Dart
@@ -49,6 +53,18 @@ class Bambino{
       scuolaFrequentata: ScuolaExtension.fromApiValue(json['scuolaFrequentata']),
       titoloStudio: TitoloStudioExtension.fromApiValue(json['titoloStudio']),
       codiceGioco: json['codiceGioco'],
+      percorsiAssegnati:
+        (json['percorsiAssegnati'] as List<dynamic>?)
+                ?.map(
+                  (e) => PercorsoAssegnato.fromJson(
+                    e as Map<String, dynamic>,
+                  ),
+                )
+                .toList() ??
+            [],
+      diagnosi: json['diagnosi'] != null
+          ? Diagnosi.fromMap(json['diagnosi'])
+          : null,
     );
   }
 

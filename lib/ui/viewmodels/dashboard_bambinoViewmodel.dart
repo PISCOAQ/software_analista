@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:software_analista/data/repository/dashboard_bambinoRepository.dart';
 import 'package:software_analista/domain/models/bambino.dart';
+import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
 
 class DashboardBambinoViewModel extends ChangeNotifier {
-  final Bambino _bambino;
-  bool _isLoading = true;
+  Bambino _bambino;
+  bool _isLoading = false;
   final DashboardBambinorepository _repository;
   List<Test> _tests = []; /// tutti i test del bambino
 
@@ -61,6 +62,47 @@ class DashboardBambinoViewModel extends ChangeNotifier {
     };
   }).toList();
 }
+
+
+  Future<void> inserisciDiagnosi(Diagnosi diagnosi) async {
+    _setLoading(true);
+
+  try {
+    final bambinoAggiornato = await _repository.salvaDiagnosi(bambino.id, diagnosi);
+    _bambino = bambinoAggiornato;
+
+    notifyListeners();
+    
+
+  } catch (e) {
+    debugPrint('Errore durante il salvataggio della diagnosi: $e');
+  }
+
+
+  _setLoading(false);
+  notifyListeners();
+}
+
+Future<void> modificaDiagnosi(Diagnosi diagnosi) async {
+  await inserisciDiagnosi(diagnosi);
+}
+
+Future<void> eliminaDiagnosi() async {
+  _setLoading(true);
+  notifyListeners();
+
+  try {
+    final Bambino bambinoAggiornato = await _repository.eliminaDiagnosi(bambino.id);
+    _bambino = bambinoAggiornato;
+  } catch (e) {
+    debugPrint('Errore durante eliminazione diagnosi: $e');
+  }
+
+  _setLoading(false);
+  notifyListeners();
+}
+
+
 
 
   // ===============================
