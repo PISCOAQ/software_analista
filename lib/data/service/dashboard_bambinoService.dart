@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:software_analista/domain/models/bambino.dart';
 import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
@@ -55,5 +58,35 @@ class Dashboard_bambinoService{
     }
 
     return Bambino.fromJson(jsonDecode(response.body));
+  }
+
+
+  Future<String> downloadExcel(String bambinoId, String nomeBambino) async {
+    final url = 'http://localhost:3000/export/excel/$bambinoId';
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode != 200) {
+      throw Exception(
+        'Errore download Excel: ${response.statusCode}',
+      );
+    }
+
+      // Ottieni la cartella Documenti o temporanea
+      final dir = await getDownloadsDirectory()
+         ?? await getApplicationDocumentsDirectory();
+
+      final filePath = '${dir.path}/report_$nomeBambino.xlsx';
+
+      // Scrivi il file su disco
+      final file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
+
+      print('File salvato in: $filePath');
+
+      // Apri il file (opzionale)
+      OpenFile.open(filePath);
+
+      return filePath;
   }
 }

@@ -102,8 +102,20 @@ Future<void> eliminaDiagnosi() async {
   notifyListeners();
 }
 
+Future<void> esportaExcel(String bambinoId, String nome) async {
+    try {
+      _setLoading(true);
 
-
+      await _repository.downloadExcel(
+        _bambino.id!,
+        _bambino.nome,
+      );
+    } catch (e) {
+      debugPrint("Errore nel dowload del file excel: $e");
+    } finally {
+      _setLoading(false);
+    }
+  }
 
   // ===============================
   // UTILS

@@ -194,6 +194,42 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                 ),
                               ),
 
+                              const SizedBox(height: 16),
+
+
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: ElevatedButton.icon(                                 
+                                  icon: const Icon(Icons.download),
+                                  label: const Text("Scarica report Excel"),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                                    textStyle: const TextStyle(fontSize: 15),
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white
+                                  ),
+                                  onPressed: vm.isLoading
+                                    ? null
+                                    : () async {
+                                      try {
+                                        await vm.esportaExcel( bambino.id!, bambino.nome );
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                            content: Text("Report Excel scaricato con successo"),
+                                          ),
+                                        );
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                            content: Text("Errore durante il download del report"),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+
                               const SizedBox(height: 32),
 
                               /// 📌 TABELLA TEST PRE
@@ -280,8 +316,8 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                             ),
                                           DataCell(Text('${test.domandeCorrette.toStringAsFixed(2)} / ${test.domandeTotali.toStringAsFixed(2)}')),
                                           DataCell(Text("${test.tempoMedioReazione.toStringAsFixed(2)} ms"),),
-                                        const DataCell(Text('Movimento del mouse')),
-                                        const DataCell(Text('Metodo di interazione'))
+                                        const DataCell(Text('Movimento Mouse')),
+                                        const DataCell(Text('Metodo interazione'))
                                       ]);
                                     }).toList(),
                                     border: TableBorder.symmetric(
@@ -311,6 +347,10 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                       child: ElevatedButton.icon(
                                         icon: const Icon(Icons.add),
                                         label: const Text("Inserisci Diagnosi"),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          foregroundColor: Colors.white,
+                                        ),
                                         onPressed: () async {
                                           final nuovaDiagnosi = await showDialog<Diagnosi>(
                                             context: context,
@@ -329,7 +369,7 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                         decoration: BoxDecoration(
                                           border: Border.all(color: Colors.black, width: 2),
                                           borderRadius: BorderRadius.circular(12),
-                                          color: Colors.grey.shade100,
+                                          color: Colors.white,
                                         ),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,97 +385,100 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                             Text(
                                               diagnosi.testo,
                                               style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              "Gravità: ${diagnosi.livelloGravita.name}",
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-            if (diagnosi.note != null && diagnosi.note!.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text(
-                  "Note: ${diagnosi.note}",
-                  style: const TextStyle(fontSize: 14),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              "Gravità: ${diagnosi.livelloGravita.name}",
+                                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                            ),
+                                            if (diagnosi.note != null && diagnosi.note!.isNotEmpty)
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 4.0),
+                                                child: Text(
+                                                  "Note: ${diagnosi.note}",
+                                                  style: const TextStyle(fontSize: 14),
+                                                ),
+                                              ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              "Inserita il: ${_formatDate(diagnosi.dataInserimento)}",
+                                              style: const TextStyle(fontSize: 12, color: Colors.white),
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Row(
+                                              children: [
+                                                ElevatedButton.icon(
+                                                  icon: const Icon(Icons.edit),
+                                                  label: const Text("Modifica"),
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.black,
+                                                    foregroundColor: Colors.white
+                                                  ),
+                                                  onPressed: () async {
+                                                    final modificata = await showDialog<Diagnosi>(
+                                                      context: context,
+                                                      builder: (_) => DiagnosiDialog(diagnosi: diagnosi),
+                                                    );
+                                                    if (modificata != null) {
+                                                      await vm.modificaDiagnosi(modificata);
+                                                    }
+                                                  },
+                                                ),
+                                                const SizedBox(width: 12),
+                                                ElevatedButton.icon(
+                                                  icon: const Icon(Icons.delete),
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.black,
+                                                    foregroundColor: Colors.white,
+                                                  ),
+                                                  label: const Text("Elimina"),
+                                                  onPressed: () async {
+                                                    final conferma = await showDialog<bool>(
+                                                      context: context,
+                                                      builder: (_) => AlertDialog(
+                                                        title: const Text("Conferma eliminazione"),
+                                                        content: const Text("Sei sicuro di voler eliminare la diagnosi?"),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () => Navigator.pop(context, false),
+                                                            child: const Text("Annulla"),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () => Navigator.pop(context, true),
+                                                            child: const Text("Elimina"),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                    if (conferma == true) {
+                                                      await vm.eliminaDiagnosi();
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                                const SizedBox(height: 32),
+                                const SizedBox(height: 32),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            const SizedBox(height: 8),
-            Text(
-              "Inserita il: ${_formatDate(diagnosi.dataInserimento)}",
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.edit),
-                  label: const Text("Modifica"),
-                  onPressed: () async {
-                    final modificata = await showDialog<Diagnosi>(
-                      context: context,
-                      builder: (_) => DiagnosiDialog(diagnosi: diagnosi),
-                    );
-                    if (modificata != null) {
-                      await vm.modificaDiagnosi(modificata);
-                    }
-                  },
-                ),
-                const SizedBox(width: 12),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.delete),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                  ),
-                  label: const Text("Elimina"),
-                  onPressed: () async {
-                    final conferma = await showDialog<bool>(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: const Text("Conferma eliminazione"),
-                        content: const Text("Sei sicuro di voler eliminare la diagnosi?"),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, false),
-                            child: const Text("Annulla"),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, true),
-                            child: const Text("Elimina"),
-                          ),
-                        ],
-                      ),
-                    );
-                    if (conferma == true) {
-                      await vm.eliminaDiagnosi();
-                    }
-                  },
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
-  },
-),
-const SizedBox(height: 32),
-
-
-                              const SizedBox(height: 32),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   /// Widget riutilizzabile per i dati
   Widget _infoItem({required String label, required String value}) {

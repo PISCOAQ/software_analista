@@ -19,4 +19,8 @@ class DashboardBambinorepository {
   Future<Bambino> eliminaDiagnosi(String? bambinoId){
     return service.eliminaDiagnosi(bambinoId);
   }
+
+  Future<String> downloadExcel(String bambinoId, String nomeBambino) async {
+    return service.downloadExcel(bambinoId, nomeBambino);
+  }
 }
