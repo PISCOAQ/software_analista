@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:software_analista/data/repository/dashboard_bambinoRepository.dart';
+import 'package:software_analista/domain/enums/tipoTest.dart';
 import 'package:software_analista/domain/models/bambino.dart';
 import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
@@ -24,6 +25,12 @@ class DashboardBambinoViewModel extends ChangeNotifier {
   Bambino get bambino => _bambino;
   bool get isLoading => _isLoading;
   List<Test> get tests => _tests;
+  List<Test> get testPre =>
+    tests.where((t) => t.tipoTest == TipoTest.pre).toList();
+
+  List<Test> get testPost =>
+    tests.where((t) => t.tipoTest == TipoTest.post).toList();
+
 
   // ===============================
   // INIT
@@ -55,7 +62,7 @@ class DashboardBambinoViewModel extends ChangeNotifier {
   return _tests.map((test) {
     return {
       /// ASSE X → nome del livello del percorso
-      'test': test.nome,
+      'test': test.nomeTest,
 
       /// ASSE Y → punteggio ottenuto in quel livello
       'punteggio': test.domandeCorrette,

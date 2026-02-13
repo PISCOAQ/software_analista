@@ -1,39 +1,37 @@
 import 'package:software_analista/domain/enums/tipoTest.dart';
-import 'package:software_analista/domain/models/domandaTest.dart';
+import 'package:software_analista/domain/models/domandeTest.dart';
 
 
 class Test {
-  final String id;
+  final String testId;
   final String bambinoId;
   final String? percorsoId; // per ora opzionale
-  final String nome;
-  final TipoTest tipo;
+  final String nomeTest;
+  final TipoTest tipoTest;
+  final bool? superato;
   //final String metodoInterazione;
   final double tempoMedioReazione;
-  final String movimentoMouse;
-  final bool superato;
-  final int domandeCorrette;
-  final int domandeTotali;
-  final List<DomandaTest> domande;
+  final int movimentoMouse;
+  final List<Domandetest> domande;
+
 
   Test({
-    required this.id,
+    required this.testId,
     required this.bambinoId,
     this.percorsoId,
-    required this.nome,
-    required this.tipo,
+    required this.nomeTest,
+    required this.tipoTest,
+    this.superato,
     //required this.metodoInterazione,
     required this.tempoMedioReazione,
     required this.movimentoMouse,
-    required this.superato,
-    required this.domandeCorrette,
-    required this.domandeTotali,
     required this.domande,
   });
-  
-  double get percentuale =>
-      domandeTotali == 0 ? 0 : (domandeCorrette / domandeTotali) * 100;
 
+  int get totaleDomande => domande.length;
+  int get domandeCorrette =>
+    domande.where((d) => d.correct == true).length;
+  
   /*double get tempoMedioReazione {
     if (domande.isEmpty) return 0;
     return domande
@@ -47,19 +45,22 @@ class Test {
 
   factory Test.fromJson(Map<String, dynamic> json) {
     final domandeJson = json['domande'] as List<dynamic>? ?? [];
+    print(json['superato'].runtimeType); // deve stampare bool
+
     return Test(
-      id: json['id'],
+      testId: json['_id'],
       bambinoId: json['bambinoId'],
       percorsoId: json['percorsoId'],
-      nome: json['nomeTest'],
-      tipo: json['tipo'],
-      superato: json['superato'],
-      tempoMedioReazione: json['tempoMedioReazione'],
-      movimentoMouse: json['movimentoMouse'],
-      domandeCorrette: json['domandeCorrette'],
-      domandeTotali: json['domandeTotali'],
+      nomeTest: json['nomeTest'],
+      tipoTest: json['tipoTest'] == 'pre'
+          ? TipoTest.pre
+          : TipoTest.post,
+      superato: json['superato'] as bool,
+      tempoMedioReazione: (json['tempoMedioReazione'] as num).toDouble(),
+      //metodoInterazione: json['metodoInterazione'],
+      movimentoMouse: json['movimentoMouse'] as int,
       domande: domandeJson
-          .map((d) => DomandaTest.fromJson(d as Map<String, dynamic>))
+          .map((d) => Domandetest.fromJson(d as Map<String, dynamic>))
           .toList(),
     );
   }

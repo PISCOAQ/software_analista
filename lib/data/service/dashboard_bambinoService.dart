@@ -15,16 +15,16 @@ class Dashboard_bambinoService{
     final response = await http.get(
       Uri.parse('$baseUrl/api/tentativi-test/tentativi/$codiceGioco'),
     );
-    debugPrint('GET /tentativi/$codiceGioco');
-    debugPrint('STATUS: ${response.statusCode}');
-    debugPrint('BODY: ${response.body}');
+    
 
     if (response.statusCode != 200) {
       throw Exception('Errore caricamento bambini');
     }
 
     final List data = jsonDecode(response.body);
+    print(data);
     return data.map((e) => Test.fromJson(e)).toList();
+    
   }
 
   Future<Bambino> salvaDiagnosi(

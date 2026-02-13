@@ -246,28 +246,28 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                     columnSpacing: 20,
                                     dividerThickness: 1,
                                     columns: const [
-                                      DataColumn(
-                                          label: Text("Test Pre-Esercitazione")),
+                                      DataColumn(label: Text("Test Pre-Esercitazione")),
                                       DataColumn(label: Text("Risultato")),
                                       DataColumn(label: Text('Tempo medio di reazione')),
                                       DataColumn(label: Text('Movimento del mouse')),
-                                      DataColumn(label: Text('Metodo di interazione'))
+                                      //DataColumn(label: Text('Metodo di interazione'))
                                     ],
-                                    rows: vm.tests.map((test) {
+                                    rows: vm.testPre.map((test) {
                                       return DataRow(
                                         cells: [
                                           DataCell(
                                             Text(
-                                              test.nome,
+                                              test.nomeTest,
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ),
-                                          DataCell(Text('${test.domandeCorrette.toStringAsFixed(2)} / ${test.domandeTotali.toStringAsFixed(2)}')),
+                                        
+                                          DataCell(  Text("${test.domandeCorrette} / ${test.totaleDomande}")),
                                           DataCell(Text("${test.tempoMedioReazione.toStringAsFixed(2)} ms"),),
-                                        const DataCell(Text('Movimento del mouse')),
-                                        const DataCell(Text('Metodo di interazione'))
+                                          DataCell(Text('${test.movimentoMouse}')),
+                                        //const DataCell(Text('Metodo di interazione'))
                                       ]);
                                     }).toList(),
                                     border: TableBorder.symmetric(
@@ -303,21 +303,21 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                       DataColumn(label: Text('Movimento del mouse')),
                                       DataColumn(label: Text('Metodo di interazione'))
                                     ],
-                                    rows: vm.tests.map((test) {
+                                    rows: vm.testPost.map((test) {
                                       return DataRow(
                                         cells: [
                                           DataCell(
                                             Text(
-                                              test.nome,
+                                              test.nomeTest,
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ),
-                                          DataCell(Text('${test.domandeCorrette.toStringAsFixed(2)} / ${test.domandeTotali.toStringAsFixed(2)}')),
+                                          DataCell(Text("${test.domandeCorrette} / ${test.totaleDomande}")),
                                           DataCell(Text("${test.tempoMedioReazione.toStringAsFixed(2)} ms"),),
-                                        const DataCell(Text('Movimento Mouse')),
-                                        const DataCell(Text('Metodo interazione'))
+                                          DataCell(Text('${test.movimentoMouse}')),
+                                        //const DataCell(Text('Metodo interazione'))
                                       ]);
                                     }).toList(),
                                     border: TableBorder.symmetric(
