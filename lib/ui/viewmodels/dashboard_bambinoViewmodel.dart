@@ -3,6 +3,7 @@ import 'package:software_analista/data/repository/dashboard_bambinoRepository.da
 import 'package:software_analista/domain/enums/tipoTest.dart';
 import 'package:software_analista/domain/models/bambino.dart';
 import 'package:software_analista/domain/models/diagnosi.dart';
+import 'package:software_analista/domain/models/linechartpoint.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
 
 class DashboardBambinoViewModel extends ChangeNotifier {
@@ -30,6 +31,13 @@ class DashboardBambinoViewModel extends ChangeNotifier {
 
   List<Test> get testPost =>
     tests.where((t) => t.tipoTest == TipoTest.post).toList();
+  List<LineChartPoint> get progressiPreChartData =>
+    _buildChartData(testPre);
+
+  List<LineChartPoint> get progressiPostChartData =>
+    _buildChartData(testPost);
+  double get maxPreY => _getMaxY(testPre) + 1;
+  double get maxPostY => _getMaxY(testPost) + 1;
 
 
   // ===============================
@@ -56,18 +64,24 @@ class DashboardBambinoViewModel extends ChangeNotifier {
     _setLoading(false);
   }
 
-  List<Map<String, dynamic>> getProgressiChartData() {
-  if (_tests.isEmpty) return [];
+  List<LineChartPoint> _buildChartData(List<Test> listaTest) {
+  if (listaTest.isEmpty) return [];
 
-  return _tests.map((test) {
-    return {
-      /// ASSE X → nome del livello del percorso
-      'test': test.nomeTest,
-
-      /// ASSE Y → punteggio ottenuto in quel livello
-      'punteggio': test.domandeCorrette,
-    };
+  return listaTest.map((test) {
+    return LineChartPoint(
+      label: test.nomeTest,
+      value: test.domandeCorrette.toDouble(),
+    );
   }).toList();
+}
+
+double _getMaxY(List<Test> listaTest) {
+  if (listaTest.isEmpty) return 10;
+
+  return listaTest
+      .map((e) => e.domandeCorrette)
+      .reduce((a, b) => a > b ? a : b)
+      .toDouble();
 }
 
 

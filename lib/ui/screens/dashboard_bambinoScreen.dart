@@ -332,9 +332,28 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
 
                               const SizedBox(height: 32),
 
-                              /// 📈 GRAFICO LINEARE
-                              LineChartWidget(
-                                data: vm.getProgressiChartData(),
+                              Column(
+                                children: [
+                                  /// 📈 GRAFICO TEST PRE
+                                  if (vm.progressiPreChartData.isNotEmpty)
+                                    LineChartWidget(
+                                      data: vm.progressiPreChartData,
+                                      title: 'Andamento Test Pre',
+                                      xAxisTitle: 'Test Pre',
+                                      yAxisTitle: 'Punteggio',
+                                      maxY: vm.maxPreY,
+                                    ),
+
+                                    /// 📈 GRAFICO TEST POST
+                                    if (vm.progressiPostChartData.isNotEmpty)
+                                      LineChartWidget(
+                                        data: vm.progressiPostChartData,
+                                        title: 'Andamento Test Post',
+                                        xAxisTitle: 'Test Post',
+                                        yAxisTitle: 'Punteggio',
+                                        maxY: vm.maxPostY,
+                                      ),
+                                ],
                               ),
 
                               /// 📌 SEZIONE DIAGNOSI

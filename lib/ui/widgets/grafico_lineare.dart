@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
+import 'package:software_analista/domain/models/linechartpoint.dart';
 class LineChartWidget extends StatelessWidget {
-  final List<Map<String, dynamic>> data;
+  final List<LineChartPoint> data;
+  final String title;
+  final String xAxisTitle;
+  final String yAxisTitle;
+  final double? maxY;
 
   const LineChartWidget({
     super.key,
     required this.data,
+    required this.title,
+    required this.xAxisTitle,
+    required this.yAxisTitle,
+    this.maxY,
   });
 
   @override
@@ -15,9 +23,9 @@ class LineChartWidget extends StatelessWidget {
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
+        side: const BorderSide(
           color: Colors.black,
-        width: 2,
+          width: 2,
         ),
       ),
       elevation: 3,
@@ -25,31 +33,27 @@ class LineChartWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: SfCartesianChart(
-          title: ChartTitle(text: 'Andamento punteggi nei test'),
+          title: ChartTitle(text: title),
 
-          /// ASSE X → TEST
+          /// ASSE X
           primaryXAxis: CategoryAxis(
-            title: AxisTitle(text: 'Test'),
-            labelRotation: -45, // utile se i nomi sono lunghi
+            title: AxisTitle(text: xAxisTitle),
+            labelRotation: -45,
           ),
 
-          /// ASSE Y → PUNTEGGIO
+          /// ASSE Y
           primaryYAxis: NumericAxis(
-            title: AxisTitle(text: 'Punteggio'),
+            title: AxisTitle(text: yAxisTitle),
             minimum: 0,
-            maximum: 10,
-            interval: 1,
+            maximum: maxY,
           ),
 
-          series: <LineSeries<Map<String, dynamic>, String>>[
-            LineSeries<Map<String, dynamic>, String>(
+          series: <LineSeries<LineChartPoint, String>>[
+            LineSeries<LineChartPoint, String>(
               dataSource: data,
 
-              /// NOME DEL TEST
-              xValueMapper: (datum, _) => datum['test'] as String,
-
-              /// PUNTEGGIO OTTENUTO
-              yValueMapper: (datum, _) => datum['punteggio'] as num,
+              xValueMapper: (point, _) => point.label,
+              yValueMapper: (point, _) => point.value,
 
               color: Colors.blue,
               width: 3,
