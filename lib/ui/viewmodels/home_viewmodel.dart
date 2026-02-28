@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:software_analista/data/repository/homeRepository.dart';
-import 'package:software_analista/data/repository/lista_bambiniRepository.dart';
+import 'package:software_analista/data/repository/lista_utentiRepository.dart';
 import 'package:software_analista/data/service/homeService.dart';
-import 'package:software_analista/data/service/lista_bambiniService.dart';
+import 'package:software_analista/data/service/lista_utentiService.dart';
 import 'package:software_analista/domain/enums/tipoTest.dart';
-import 'package:software_analista/domain/models/bambino.dart';
+import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
 import 'package:software_analista/domain/models/linechartpoint.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
 import 'package:software_analista/domain/models/testStat.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  final ListaBambiniRepository _bambiniRepository = ListaBambiniRepository(ListaBambiniService());
+  final ListaUtentiRepository _utentiRepository = ListaUtentiRepository(ListaUtentiService());
   final HomeRepository _homeRepository = HomeRepository(HomeService());
 
   bool isLoading = false;
-  List<Test> _tests = []; /// tutti i test del bambino
+  List<Test> _tests = []; /// tutti i test dell'utente
   List<TestStat> _stats = [];
   List<LineChartPoint> _chartData = [];
   List<LineChartPoint> get chartData => _chartData;
 
-  int numeroBambini = 0;
+  int numeroUtenti = 0;
   int numeroMaschi = 0;
   int numeroFemmine = 0;
   int numeroPercorsi = 0;
@@ -42,13 +42,13 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Recupero lista completa dei bambini
-      final List<Bambino> bambini = await _bambiniRepository.listaBambini();
+      // Recupero lista completa degli utenti
+      final List<Utente> utenti = await _utentiRepository.listaUtenti();
 
       // Calcolo dati per la home
-      numeroBambini = bambini.length;
-      numeroMaschi = bambini.where((b) => b.sesso == Sesso.maschio).length;
-      numeroFemmine = bambini.where((b) => b.sesso == Sesso.femmina).length;
+      numeroUtenti = utenti.length;
+      numeroMaschi = utenti.where((b) => b.sesso == Sesso.maschio).length;
+      numeroFemmine = utenti.where((b) => b.sesso == Sesso.femmina).length;
 
       // Recupero numero percorsi da definire
 
@@ -58,7 +58,7 @@ class HomeViewModel extends ChangeNotifier {
 
     } catch (e) {
       // gestione errori
-      numeroBambini = 0;
+      numeroUtenti = 0;
       numeroMaschi = 0;
       numeroFemmine = 0;
       numeroPercorsi = 0;

@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:software_analista/data/service/dashboard_bambinoService.dart';
-import 'package:software_analista/ui/screens/dashboard_bambinoScreen.dart';
-import 'package:software_analista/ui/screens/registrazione_bambinoScreen.dart';
-import 'package:software_analista/ui/viewmodels/lista_bambiniViewmodel.dart';
-import 'package:software_analista/ui/widgets/BambinoCard.dart';
+import 'package:software_analista/data/service/dashboard_utenteService.dart';
+import 'package:software_analista/domain/models/utente.dart';
+import 'package:software_analista/ui/screens/dashboard_utenteScreen.dart';
+import 'package:software_analista/ui/screens/registrazione_utenteScreen.dart';
+import 'package:software_analista/ui/viewmodels/lista_utentiViewmodel.dart';
+import 'package:software_analista/ui/widgets/UtenteCard.dart';
 import 'package:software_analista/ui/widgets/Sidebar.dart';
 import 'package:software_analista/ui/widgets/Topbar.dart';
-import 'package:software_analista/data/repository/dashboard_bambinoRepository.dart';
+import 'package:software_analista/data/repository/dashboard_utenteRepository.dart';
 
-class Lista_bambiniScreen extends StatefulWidget {
-  const Lista_bambiniScreen({super.key});
+class Lista_utentiScreen extends StatefulWidget {
+  const Lista_utentiScreen({super.key});
 
   @override
-  State<Lista_bambiniScreen> createState() => _Lista_bambiniScreenState();
+  State<Lista_utentiScreen> createState() => _Lista_utentiScreenState();
 }
 
-class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
+class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,18 +83,18 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
                           ),
                         ),
                         onPressed: () async {
-                          final nuovoBambino = await Navigator.push(
+                          final nuovoUtente = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) =>
-                                  const RegistrazioneBambinoScreen(),
+                                  const RegistrazioneUtenteScreen(),
                             ),
                           );
 
-                          if (nuovoBambino != null) {
+                          if (nuovoUtente != null) {
                             final vm =
-                                context.read<lista_bambiniViewmodel>();
-                            vm.aggiungiBambino(nuovoBambino);
+                                context.read<lista_utentiViewmodel>();
+                            vm.aggiungiUtente(nuovoUtente);
                           }
                         },
                       ),
@@ -114,7 +115,7 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
   }
 
   Widget _buildContenuto() {
-    return Consumer<lista_bambiniViewmodel>(
+    return Consumer<lista_utentiViewmodel>(
       builder: (context, vm, _) {
         if (vm.isLoading) {
           return const Center(
@@ -122,7 +123,7 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
           );
         }
 
-        if (vm.bambini.isEmpty) {
+        if (vm.utenti.isEmpty) {
           return const Center(
             child: Text(
               "Nessun utente presente",
@@ -139,21 +140,21 @@ class _Lista_bambiniScreenState extends State<Lista_bambiniScreen> {
             ),
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              itemCount: vm.bambini.length,
+              itemCount: vm.utenti.length,
               separatorBuilder: (_, __) =>
                   const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                final bambino = vm.bambini[index];
+                final utente = vm.utenti[index];
 
-                return BambinoCard(
-                  bambino: bambino,
+                return UtenteCard(
+                  utente: utente,
                   onTap: () {
-                    final testService = Dashboard_bambinoService();
+                    final testService = Dashboard_utenteService();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) =>
-                            Dashboard_bambinoScreen(bambino: bambino, repository: DashboardBambinorepository(testService),),
+                            Dashboard_utenteScreen(utente: utente, repository: DashboardUtenterepository(testService),),
                       ),
                     );
                   },

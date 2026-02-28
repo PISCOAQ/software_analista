@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:software_analista/domain/models/bambino.dart';
+import 'package:software_analista/domain/models/utente.dart';
 
 class AssegnaPercorsoService {
   final String baseUrl = 'http://localhost:3000';
 
-  /// Assegna un percorso a un bambino
-  Future<Bambino> assegnaPercorso({
-    required String? bambinoId,
+  /// Assegna un percorso a un utente
+  Future<Utente> assegnaPercorso({
+    required String? utenteId,
     required String percorsoIdEsterno,
     required String nomePercorso,
   }) async {
-    final url = Uri.parse('$baseUrl/bambini/$bambinoId/assegna-percorso');
+    final url = Uri.parse('$baseUrl/utenti/$utenteId/assegna-percorso');
 
     final response = await http.post(
       url,
@@ -26,7 +26,7 @@ class AssegnaPercorsoService {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> json = jsonDecode(response.body);
-      return Bambino.fromJson(json['bambino']);
+      return Utente.fromJson(json['utente']);
     } else {
       throw Exception(
         'Errore assegnazione percorso (${response.statusCode})',

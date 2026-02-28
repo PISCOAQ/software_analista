@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:software_analista/domain/models/utente.dart';
-import 'package:software_analista/domain/models/percorso.dart';
-import 'package:software_analista/ui/screens/riassunto_assegnazioneScreen.dart';
-import 'package:software_analista/ui/widgets/Sidebar.dart';
-import 'package:software_analista/ui/widgets/Topbar.dart';
 import 'package:provider/provider.dart';
-import 'package:software_analista/ui/viewmodels/lista_percorsiViewmodel.dart';
-import 'package:software_analista/ui/widgets/percorso_card.dart';
+import 'package:software_analista/ui/screens/selezione_percorsoScreen.dart';
+import 'package:software_analista/ui/viewmodels/lista_utentiViewmodel.dart';
+import 'package:software_analista/ui/widgets/UtenteCard.dart';
+import 'package:software_analista/ui/widgets/Topbar.dart';
+import 'package:software_analista/ui/widgets/Sidebar.dart';
+import 'package:software_analista/domain/models/utente.dart';
 
-class SelezionePercorsoScreen extends StatefulWidget {
-  final Utente utenteSelezionato;
-  const SelezionePercorsoScreen({super.key, required this.utenteSelezionato});
+class SelezioneUtenteScreen extends StatefulWidget {
+  const SelezioneUtenteScreen({super.key});
 
   @override
-  State<SelezionePercorsoScreen> createState() => _SelezionePercorsoScreenState();
+  State<SelezioneUtenteScreen> createState() => _SelezioneUtenteScreenState();
 }
 
-class _SelezionePercorsoScreenState extends State<SelezionePercorsoScreen> {
-  Percorso? percorsoSelezionato;
+class _SelezioneUtenteScreenState extends State<SelezioneUtenteScreen> {
+  Utente? utenteSelezionato;
   String ricerca = "";
 
   @override
@@ -38,13 +36,11 @@ class _SelezionePercorsoScreenState extends State<SelezionePercorsoScreen> {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 600),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Titolo della pagina
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                             child: Text(
-                              "Seleziona percorso",
+                              "Seleziona Utente",
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -52,13 +48,12 @@ class _SelezionePercorsoScreenState extends State<SelezionePercorsoScreen> {
                               ),
                             ),
                           ),
-
                           // Barra di Ricerca
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            padding: const EdgeInsets.all(16.0),
                             child: TextField(
                               decoration: const InputDecoration(
-                                hintText: 'Cerca percorso...',
+                                hintText: 'Cerca utente...',
                                 prefixIcon: Icon(Icons.search),
                                 border: OutlineInputBorder(),
                               ),
@@ -70,39 +65,43 @@ class _SelezionePercorsoScreenState extends State<SelezionePercorsoScreen> {
                             ),
                           ),
 
-                          const SizedBox(height: 16),
-
-                          // Lista Percorsi
+                          // Lista Utenti
                           Expanded(
-                            child: Consumer<lista_percorsiViewModel>(
+                            child: Consumer<lista_utentiViewmodel>(
                               builder: (context, vm, _) {
-                                final listaFiltrata = vm.percorsi.where((p) {
-                                  return p.nome.toLowerCase().contains(ricerca);
+                                if (vm.isLoading) {
+                                  return const Center(child: CircularProgressIndicator());
+                                }
+
+                                final listaFiltrata = vm.utenti.where((u) {
+                                  final nome = u.nome.toLowerCase();
+                                  final cognome = u.cognome.toLowerCase();
+                                  return nome.contains(ricerca) || cognome.contains(ricerca);
                                 }).toList();
 
                                 if (listaFiltrata.isEmpty) {
-                                  return const Center(child: Text("Nessun percorso trovato."));
+                                  return const Center(child: Text("Nessun utente trovato."));
                                 }
 
                                 return ListView.separated(
-                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                   itemCount: listaFiltrata.length,
                                   separatorBuilder: (_, __) => const SizedBox(height: 12),
                                   itemBuilder: (context, index) {
-                                    final percorso = listaFiltrata[index];
-                                    final isSelected = percorsoSelezionato == percorso;
-
+                                    final utente = listaFiltrata[index];
+                                    final isSelected = utenteSelezionato == utente;
+                                    
                                     return Opacity(
                                       opacity: isSelected ? 1.0 : 0.8,
                                       child: Container(
                                         decoration: isSelected 
                                             ? BoxDecoration(border: Border.all(color: Colors.black, width: 2), borderRadius: BorderRadius.circular(16))
                                             : null,
-                                        child: percorso_card(
-                                          percorso: percorso,
+                                        child: UtenteCard(
+                                          utente: utente,
                                           onTap: () {
                                             setState(() {
-                                              percorsoSelezionato = percorso;
+                                              utenteSelezionato = utente;
                                             });
                                           },
                                         ),
@@ -129,14 +128,13 @@ class _SelezionePercorsoScreenState extends State<SelezionePercorsoScreen> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  onPressed: percorsoSelezionato != null
-                                      ? () {
+                                onPressed: utenteSelezionato != null
+                                    ? () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) => AssegnazioneRiassuntoScreen(
-                                              utente: widget.utenteSelezionato,
-                                              percorso: percorsoSelezionato!,
+                                            builder: (_) => SelezionePercorsoScreen(
+                                              utenteSelezionato: utenteSelezionato!,
                                             ),
                                           ),
                                         );
@@ -146,20 +144,20 @@ class _SelezionePercorsoScreenState extends State<SelezionePercorsoScreen> {
                                   'Continua',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 }

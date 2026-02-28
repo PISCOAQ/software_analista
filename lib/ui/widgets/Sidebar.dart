@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:software_analista/ui/screens/HomeScreen.dart';
-import 'package:software_analista/ui/screens/lista_bambiniScreen.dart';
+import 'package:software_analista/ui/screens/lista_utentiScreen.dart';
 import 'package:software_analista/ui/screens/lista_percorsiScreen.dart';
-import 'package:software_analista/ui/screens/selezione_bambinoScreen.dart';
+import 'package:software_analista/ui/screens/selezione_utenteScreen.dart';
 import 'package:software_analista/ui/widgets/Sidebar_item.dart';
 
 class Sidebar extends StatelessWidget {
@@ -44,7 +44,7 @@ class Sidebar extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => Lista_bambiniScreen()),
+                MaterialPageRoute(builder: (_) => Lista_utentiScreen()),
               );
             },
           ),
@@ -64,13 +64,9 @@ class Sidebar extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => SelezioneBambinoScreen()),
+                MaterialPageRoute(builder: (_) => SelezioneUtenteScreen()),
               );
             },
-          ),
-          SidebarItem(
-            icon: Icons.settings,
-            label: 'Impostazioni',
           ),
         ],
       ),

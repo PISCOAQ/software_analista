@@ -1,5 +1,3 @@
-import 'package:software_analista/domain/models/progressoPercorso.dart';
-
 class Percorso{
   final String id;
   final int numNodi;

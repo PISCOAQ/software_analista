@@ -4,7 +4,7 @@ import 'package:software_analista/domain/models/domandeTest.dart';
 
 class Test {
   final String testId;
-  final String bambinoId;
+  final String utenteId;
   final String? percorsoId; // per ora opzionale
   final String nomeTest;
   final TipoTest tipoTest;
@@ -17,7 +17,7 @@ class Test {
 
   Test({
     required this.testId,
-    required this.bambinoId,
+    required this.utenteId,
     this.percorsoId,
     required this.nomeTest,
     required this.tipoTest,
@@ -49,7 +49,7 @@ class Test {
 
     return Test(
       testId: json['_id'],
-      bambinoId: json['bambinoId'],
+      utenteId: json['utenteId'],
       percorsoId: json['percorsoId'],
       nomeTest: json['nomeTest'],
       tipoTest: json['tipoTest'] == 'pre'

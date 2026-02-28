@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                                             DataCard(
                                               icon: Icons.person,
                                               title: 'Utenti registrati',
-                                              value: vm.numeroBambini.toString(),
+                                              value: vm.numeroUtenti.toString(),
                                               color: Colors.green,
                                             ),
                                             DataCard(

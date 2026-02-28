@@ -1,41 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:software_analista/data/repository/dashboard_bambinoRepository.dart';
+import 'package:software_analista/data/repository/dashboard_utenteRepository.dart';
 import 'package:software_analista/domain/enums/extensions_scuola.dart';
 import 'package:software_analista/domain/enums/extensions_titoloStudio.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
 import 'package:software_analista/domain/models/diagnosi.dart';
-import 'package:software_analista/ui/viewmodels/dashboard_bambinoViewmodel.dart';
-import 'package:software_analista/domain/models/bambino.dart';
+import 'package:software_analista/ui/viewmodels/dashboard_utenteViewmodel.dart';
+import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/ui/widgets/DialogDiagnosi.dart';
 import 'package:software_analista/ui/widgets/grafico_lineare.dart';
 import 'package:software_analista/ui/widgets/Sidebar.dart';
 import 'package:software_analista/ui/widgets/Topbar.dart';
 import 'package:flutter/services.dart';
 
-class Dashboard_bambinoScreen extends StatefulWidget {
-  final Bambino bambino;
-  final DashboardBambinorepository repository;
+class Dashboard_utenteScreen extends StatefulWidget {
+  final Utente utente;
+  final DashboardUtenterepository repository;
 
-  const Dashboard_bambinoScreen({
+  const Dashboard_utenteScreen({
     super.key,
-    required this.bambino,
+    required this.utente,
     required this.repository
   });
 
   @override
-  State<Dashboard_bambinoScreen> createState() => _Dashboard_bambinoScreenState();
+  State<Dashboard_utenteScreen> createState() => _Dashboard_utenteScreenState();
 }
 
-class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
-  late DashboardBambinoViewModel _vm;
+class _Dashboard_utenteScreenState extends State<Dashboard_utenteScreen> {
+  late DashboardUtenteViewModel _vm;
 
   @override
   void initState(){
     super.initState();
 
-    _vm = DashboardBambinoViewModel(
-      bambino: widget.bambino,
+    _vm = DashboardUtenteViewModel(
+      utente: widget.utente,
       repository: widget.repository,
     );
 
@@ -64,7 +64,7 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
 
                   /// CONTENUTO DASHBOARD
                   Expanded(
-                    child: Consumer<DashboardBambinoViewModel>(
+                    child: Consumer<DashboardUtenteViewModel>(
                       builder: (context, vm, _) {
                         if (vm.isLoading) {
                           return const Center(
@@ -72,7 +72,7 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                           );
                         }
 
-                        final Bambino bambino = vm.bambino;
+                        final Utente utente = vm.utente;
 
                         return SingleChildScrollView(
                           padding: const EdgeInsets.all(24),
@@ -81,7 +81,7 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                             children: [
                               /// NOME + COGNOME
                               Text(
-                                "${bambino.nome} ${bambino.cognome}",
+                                "${utente.nome} ${utente.cognome}",
                                 style: const TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
@@ -90,7 +90,7 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
 
                               const SizedBox(height: 16),
 
-                              /// DATI BAMBINO
+                              /// DATI UTENTE
                               Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -117,11 +117,11 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                       children: [
                                         _infoItem(
                                           label: "Data di nascita",
-                                          value: _formatDate(bambino.dataDiNascita),
+                                          value: _formatDate(utente.dataDiNascita),
                                         ),
                                         _infoItem(
                                           label: "Sesso",
-                                          value: _formatSesso(bambino.sesso),
+                                          value: _formatSesso(utente.sesso),
                                         ),
                                       ],
                                     ),
@@ -130,11 +130,11 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                       children: [
                                         _infoItem(
                                           label: "Scuola Frequentata",
-                                          value: bambino.scuolaFrequentata.label,
+                                          value: utente.scuolaFrequentata.label,
                                         ),
                                         _infoItem(
                                           label: "Titolo di studio",
-                                          value: bambino.titoloStudio.label,
+                                          value: utente.titoloStudio.label,
                                         ),
                                       ],
                                     ),
@@ -158,7 +158,7 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    bambino.codiceGioco.toString(),
+                                                    utente.codiceGioco.toString(),
                                                     style: const TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.w600,
@@ -169,7 +169,7 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                                     onTap: () {
                                                       Clipboard.setData(
                                                           ClipboardData(
-                                                              text: bambino.codiceGioco.toString()));
+                                                              text: utente.codiceGioco.toString()));
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
                                                           content: Text("Codice copiato negli appunti"),
@@ -212,7 +212,7 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
                                     ? null
                                     : () async {
                                       try {
-                                        await vm.esportaExcel( bambino.id!, bambino.nome );
+                                        await vm.esportaExcel( utente.id!, utente.nome );
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           const SnackBar(
                                             content: Text("Report Excel scaricato con successo"),
@@ -358,9 +358,9 @@ class _Dashboard_bambinoScreenState extends State<Dashboard_bambinoScreen> {
 
                               /// 📌 SEZIONE DIAGNOSI
                               const SizedBox(height: 32),
-                              Consumer<DashboardBambinoViewModel>(
+                              Consumer<DashboardUtenteViewModel>(
                                 builder: (context, vm, _) {
-                                  final diagnosi = vm.bambino.diagnosi;
+                                  final diagnosi = vm.utente.diagnosi;
                                   if (diagnosi == null) {                  // Stato: nessuna diagnosi
                                     return Center(
                                       child: ElevatedButton.icon(

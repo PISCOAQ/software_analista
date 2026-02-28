@@ -23,12 +23,12 @@ class LineChartWidget extends StatelessWidget {
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(
+        /*side: const BorderSide(
           color: Colors.black,
           width: 2,
-        ),
+        ),*/
       ),
-      elevation: 3,
+      elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 16),
       child: Padding(
         padding: const EdgeInsets.all(16),

@@ -17,7 +17,7 @@ class TopBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Expanded(
+          /*Expanded(
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Cerca utente...',
@@ -30,7 +30,8 @@ class TopBar extends StatelessWidget {
                 ),
               ),
             ),
-          ),
+          ),*/
+          const Spacer(),
           const SizedBox(width: 16),
           IconButton(
             icon: const Icon(Icons.notifications_none),

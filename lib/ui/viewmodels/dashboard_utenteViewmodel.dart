@@ -1,21 +1,21 @@
 import 'package:flutter/foundation.dart';
-import 'package:software_analista/data/repository/dashboard_bambinoRepository.dart';
+import 'package:software_analista/data/repository/dashboard_utenteRepository.dart';
 import 'package:software_analista/domain/enums/tipoTest.dart';
-import 'package:software_analista/domain/models/bambino.dart';
+import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/domain/models/linechartpoint.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
 
-class DashboardBambinoViewModel extends ChangeNotifier {
-  Bambino _bambino;
+class DashboardUtenteViewModel extends ChangeNotifier {
+  Utente _utente;
   bool _isLoading = false;
-  final DashboardBambinorepository _repository;
-  List<Test> _tests = []; /// tutti i test del bambino
+  final DashboardUtenterepository _repository;
+  List<Test> _tests = []; /// tutti i test dell'utente
 
-  DashboardBambinoViewModel({
-    required Bambino bambino,
-    required DashboardBambinorepository repository
-    }) : _bambino = bambino,
+  DashboardUtenteViewModel({
+    required Utente utente,
+    required DashboardUtenterepository repository
+    }) : _utente = utente,
           _repository = repository;
   
 
@@ -23,7 +23,7 @@ class DashboardBambinoViewModel extends ChangeNotifier {
   // GETTERS
   // ===============================
 
-  Bambino get bambino => _bambino;
+  Utente get utente => _utente;
   bool get isLoading => _isLoading;
   List<Test> get tests => _tests;
   List<Test> get testPre =>
@@ -48,8 +48,8 @@ class DashboardBambinoViewModel extends ChangeNotifier {
     _setLoading(true);
 
     try {
-      // Carica tutti i test del bambino dalla repository
-      _tests = await _repository.getTestByBambino(_bambino.codiceGioco);
+      // Carica tutti i test dell'utente dalla repository
+      _tests = await _repository.getTestByUtente(_utente.codiceGioco);
     } catch (e) {
       print("Errore caricamento test: $e");
       _tests = [];
@@ -60,7 +60,7 @@ class DashboardBambinoViewModel extends ChangeNotifier {
 
   Future<void> reloadTests() async {
     _setLoading(true);
-    _tests = await _repository.getTestByBambino(_bambino.codiceGioco);
+    _tests = await _repository.getTestByUtente(_utente.codiceGioco);
     _setLoading(false);
   }
 
@@ -89,8 +89,8 @@ double _getMaxY(List<Test> listaTest) {
     _setLoading(true);
 
   try {
-    final bambinoAggiornato = await _repository.salvaDiagnosi(bambino.id, diagnosi);
-    _bambino = bambinoAggiornato;
+    final utenteAggiornato = await _repository.salvaDiagnosi(utente.id, diagnosi);
+    _utente = utenteAggiornato;
 
     notifyListeners();
     
@@ -113,8 +113,8 @@ Future<void> eliminaDiagnosi() async {
   notifyListeners();
 
   try {
-    final Bambino bambinoAggiornato = await _repository.eliminaDiagnosi(bambino.id);
-    _bambino = bambinoAggiornato;
+    final Utente utenteAggiornato = await _repository.eliminaDiagnosi(utente.id);
+    _utente = utenteAggiornato;
   } catch (e) {
     debugPrint('Errore durante eliminazione diagnosi: $e');
   }
@@ -123,13 +123,13 @@ Future<void> eliminaDiagnosi() async {
   notifyListeners();
 }
 
-Future<void> esportaExcel(String bambinoId, String nome) async {
+Future<void> esportaExcel(String utenteId, String nome) async {
     try {
       _setLoading(true);
 
       await _repository.downloadExcel(
-        _bambino.id!,
-        _bambino.nome,
+        _utente.id!,
+        _utente.nome,
       );
     } catch (e) {
       debugPrint("Errore nel dowload del file excel: $e");

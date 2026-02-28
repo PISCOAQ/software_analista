@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:software_analista/data/repository/registrazione_bambiniRepository.dart';
+import 'package:software_analista/data/repository/registrazione_utentiRepository.dart';
 import 'package:software_analista/domain/enums/scuola.dart';
 import 'package:software_analista/domain/enums/titoloStudio.dart';
-import 'package:software_analista/domain/models/bambino.dart';
+import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/domain/models/percorso.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
 
-class Registrazionebambino_Viewmodel extends ChangeNotifier{
+class Registrazioneutente_Viewmodel extends ChangeNotifier{
   String nome = '';
   String cognome = '';
   DateTime? dataNascita;
@@ -18,9 +18,9 @@ class Registrazionebambino_Viewmodel extends ChangeNotifier{
   Percorso? percorso;
   bool isLoading = true;
   String? errorMessage;
-  final RegistrazioneBambinoRepository repository;
+  final RegistrazioneUtenteRepository repository;
 
-  Registrazionebambino_Viewmodel({required this.repository}){
+  Registrazioneutente_Viewmodel({required this.repository}){
     _initForm();
   }
 
@@ -94,7 +94,7 @@ class Registrazionebambino_Viewmodel extends ChangeNotifier{
   }
 
 
-  Future<Bambino?> registraBambino() async {
+  Future<Utente?> registraUtente() async {
     if (nome.isEmpty || cognome.isEmpty || dataNascita == null || scuolaFrequentata == null || titoloStudio == null) {
       errorMessage = 'Compila tutti i campi obbligatori';
       notifyListeners();
@@ -118,7 +118,7 @@ class Registrazionebambino_Viewmodel extends ChangeNotifier{
     errorMessage = null;
     notifyListeners();
     try {
-      final bambino = Bambino(
+      final utente = Utente(
         id: null,
         nome: nome,
         cognome: cognome,
@@ -131,8 +131,8 @@ class Registrazionebambino_Viewmodel extends ChangeNotifier{
         codiceGioco: null,
       );
 
-      final bambinoCreato = await repository.creaBambino(bambino);
-      return bambinoCreato; // contiene anche l'ID generato dal backend
+      final utenteCreato = await repository.creaUtente(utente);
+      return utenteCreato;
     } catch (e) {
       errorMessage = 'Errore durante la registrazione: $e';
       notifyListeners();

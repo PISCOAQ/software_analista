@@ -31,15 +31,21 @@ class _Lista_percorsiScreenState extends State<Lista_percorsiScreen> {
                 TopBar(),
 
                 // Titolo della pagina
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24, vertical: 12),
-                  child: Text(
-                    "Percorsi disponibili",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade800,
+                Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 600,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      child: Text(
+                        "Percorsi disponibili",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -61,13 +67,24 @@ class _Lista_percorsiScreenState extends State<Lista_percorsiScreen> {
                         );
                       }
 
-                      return ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: vm.percorsi.length,
-                        itemBuilder: (context, index) {
-                          final percorso = vm.percorsi[index];
-                          return percorso_card(percorso: percorso);
-                        },
+                      return Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            maxWidth: 600,
+                          ),
+                          child: ListView.separated(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                            itemCount: vm.percorsi.length,
+                            separatorBuilder: (_, __) => const SizedBox(height: 12),
+                            itemBuilder: (context, index) {
+                              final percorso = vm.percorsi[index];
+                              return percorso_card(
+                                percorso: percorso,
+                                onTap: () {},
+                              );
+                            },
+                          ),
+                        ),
                       );
                     },
                   ),

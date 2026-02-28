@@ -1,5 +1,3 @@
-import 'package:software_analista/domain/models/percorso.dart';
-
 class ProgressoPercorso {
   final String percorsoId; // da sostituire con percorsoId quando avrò l'API
   final int nodiCompletati;

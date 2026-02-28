@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:software_analista/domain/models/bambino.dart';
+import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/domain/models/percorso.dart';
 import 'package:software_analista/data/repository/assegna_percorsoRepository.dart';
 import 'package:software_analista/domain/models/percorsoAssegnato.dart';
@@ -8,7 +8,7 @@ import 'package:software_analista/domain/models/progressoPercorso.dart';
 class AssegnaPercorsoViewModel extends ChangeNotifier {
   final AssegnaPercorsoRepository _repository;
 
-  Bambino? _bambinoSelezionato;
+  Utente? _utenteSelezionato;
   Percorso? _percorsoSelezionato;
   bool _isLoading = false;
   String? errore;
@@ -18,19 +18,19 @@ class AssegnaPercorsoViewModel extends ChangeNotifier {
   // ===============================
   // GETTERS
   // ===============================
-  Bambino? get bambino => _bambinoSelezionato;
+  Utente? get utente => _utenteSelezionato;
   Percorso? get percorso => _percorsoSelezionato;
   bool get isLoading => _isLoading;
 
   List<PercorsoAssegnato> get percorsiAssegnati =>
-      _bambinoSelezionato?.percorsiAssegnati ?? [];
+      _utenteSelezionato?.percorsiAssegnati ?? [];
 
   // ===============================
   // SELEZIONE
   // ===============================
 
-  void selezionaBambino(Bambino b) {
-    _bambinoSelezionato = b;
+  void selezionaUtente(Utente u) {
+    _utenteSelezionato = u;
     notifyListeners();
   }
 
@@ -43,24 +43,19 @@ class AssegnaPercorsoViewModel extends ChangeNotifier {
   // AZIONI
   // ===============================
 
-  /// Conferma l'assegnazione del percorso al bambino
+  /// Conferma l'assegnazione del percorso all'utente
   Future<void> confermaAssociazione() async {
   _setLoading(true);
 
-  print(_bambinoSelezionato!.id);
-  print(_percorsoSelezionato!.id);
-  print(_percorsoSelezionato!.nome);
-
-
   try {
-    final bambinoAggiornato =
+    final utenteAggiornato =
         await _repository.assegnaPercorso(
-          _bambinoSelezionato!.id,
+          _utenteSelezionato!.id,
           _percorsoSelezionato!.id,
           _percorsoSelezionato!.nome,
         );
 
-    _bambinoSelezionato = bambinoAggiornato;
+    _utenteSelezionato = utenteAggiornato;
 
   } catch (e) {
     errore = 'Errore durante assegnazione percorso: $e';
@@ -71,19 +66,19 @@ class AssegnaPercorsoViewModel extends ChangeNotifier {
 }
 
 
-  /// Rimuove un percorso assegnato dal bambino
+  /// Rimuove un percorso assegnato dal utente
   /*Future<void> rimuoviPercorso(Percorso p) async {
-    if (_bambinoSelezionato == null) return;
+    if (_utenteSelezionato == null) return;
 
     _setLoading(true);
 
     try {
-      final bambinoAggiornato = await _repository.rimuoviPercorso(
-        _bambinoSelezionato!.id,
+      final utenteAggiornato = await _repository.rimuoviPercorso(
+        _utenteSelezionato!.id,
         p.idEsterno,
       );
 
-      _bambinoSelezionato = bambinoAggiornato;
+      _utenteSelezionato = utenteAggiornato;
       errore = null;
     } catch (e) {
       errore = 'Errore durante la rimozione del percorso';

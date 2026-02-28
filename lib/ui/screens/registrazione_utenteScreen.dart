@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:software_analista/data/repository/registrazione_bambiniRepository.dart';
-import 'package:software_analista/data/service/registrazione_bambiniService.dart';
+import 'package:software_analista/data/repository/registrazione_utentiRepository.dart';
+import 'package:software_analista/data/service/registrazione_utentiService.dart';
 import 'package:software_analista/domain/enums/extensions_scuola.dart';
 import 'package:software_analista/domain/enums/extensions_titoloStudio.dart';
 import 'package:software_analista/domain/enums/scuola.dart';
 import 'package:software_analista/domain/enums/titoloStudio.dart';
-import 'package:software_analista/domain/models/bambino.dart';
-import 'package:software_analista/ui/viewmodels/registrazioneBambino_Viewmodel.dart';
+import 'package:software_analista/domain/models/utente.dart';
+import 'package:software_analista/ui/viewmodels/registrazioneUtente_Viewmodel.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
 import 'package:software_analista/ui/widgets/Sidebar.dart';
 import 'package:software_analista/ui/widgets/Topbar.dart';
 import 'package:flutter/services.dart';
 
-class RegistrazioneBambinoScreen extends StatelessWidget {
-  const RegistrazioneBambinoScreen({super.key});
+class RegistrazioneUtenteScreen extends StatelessWidget {
+  const RegistrazioneUtenteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => Registrazionebambino_Viewmodel(
-        repository: RegistrazioneBambinoRepository(
-          service: RegistrazioneBambinoService(),
+      create: (_) => Registrazioneutente_Viewmodel(
+        repository: RegistrazioneUtenteRepository(
+          service: RegistrazioneUtenteService(),
         ),
       ),
       child: Scaffold(
@@ -114,7 +114,7 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
                               maxWidth: 520, // 👈 larghezza form
                             ),
                             child: Consumer<
-                                Registrazionebambino_Viewmodel>(
+                                Registrazioneutente_Viewmodel>(
                               builder: (context, vm, _) {
                                 return Column(
                                   crossAxisAlignment:
@@ -287,18 +287,18 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
 
                                     ElevatedButton(
                                       onPressed: () async {
-                                        final nuovoBambino =
+                                        final nuovoUtente =
                                             await vm
-                                                .registraBambino();
-                                        if (nuovoBambino !=
+                                                .registraUtente();
+                                        if (nuovoUtente !=
                                             null) {
-                                          final bambinoDaRitornare =
+                                          final utenteDaRitornare =
                                               await _showSuccessDialog(
                                                   context,
-                                                  nuovoBambino);
+                                                  nuovoUtente);
                                           Navigator.pop(
                                               context,
-                                              bambinoDaRitornare);
+                                              utenteDaRitornare);
                                         }
                                       },
                                       child: const Text(
@@ -322,9 +322,9 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
     );
   }
 
-  Future<Bambino?> _showSuccessDialog(
-      BuildContext context, Bambino bambino) {
-    return showDialog<Bambino>(
+  Future<Utente?> _showSuccessDialog(
+      BuildContext context, Utente utente) {
+    return showDialog<Utente>(
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
@@ -338,7 +338,7 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
             const Text('Codice gioco:'),
             const SizedBox(height: 8),
             SelectableText(
-              bambino.codiceGioco!,
+              utente.codiceGioco!,
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -351,7 +351,7 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
             onPressed: () {
               Clipboard.setData(
                 ClipboardData(
-                    text: bambino.codiceGioco!),
+                    text: utente.codiceGioco!),
               );
               ScaffoldMessenger.of(context)
                   .showSnackBar(
@@ -367,7 +367,7 @@ class RegistrazioneBambinoScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(context,
                       rootNavigator: true)
-                  .pop(bambino);
+                  .pop(utente);
             },
             child: const Text('Chiudi'),
           ),

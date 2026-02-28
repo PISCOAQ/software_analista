@@ -1,15 +1,15 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
-import 'package:software_analista/domain/models/bambino.dart';
+import 'package:software_analista/domain/models/utente.dart';
 
-class BambinoCard extends StatelessWidget {
-  final Bambino bambino;
+class UtenteCard extends StatelessWidget {
+  final Utente utente;
   final VoidCallback? onTap;
 
-  const BambinoCard({
+  const UtenteCard({
     super.key,
-    required this.bambino,
+    required this.utente,
     this.onTap,
   });
 
@@ -22,7 +22,7 @@ class BambinoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
           color: Colors.black,
-        width: 2,
+        width: 1.5,
         ),
       ),
       child: InkWell(
@@ -34,18 +34,18 @@ class BambinoCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: [
-              /// ICONA BAMBINO
+              /// ICONA UTENTE
               Container(
                 width: 46,
                 height: 46,
                 decoration: BoxDecoration(
-                  color: bambino.sesso == Sesso.maschio
+                  color: utente.sesso == Sesso.maschio
     ? Colors.blue.shade400
     : Colors.pink.shade400,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  bambino.sesso == Sesso.maschio
+                  utente.sesso == Sesso.maschio
                       ? Icons.male
                       : Icons.female,
                   size: 24,
@@ -61,7 +61,7 @@ class BambinoCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${bambino.nome} ${bambino.cognome}",
+                      "${utente.nome} ${utente.cognome}",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -72,7 +72,7 @@ class BambinoCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      "Età: ${_calcolaEta(bambino.dataDiNascita)} anni",
+                      "Età: ${_calcolaEta(utente.dataDiNascita)} anni",
                       style: const TextStyle(
                         fontSize: 13,
                         color: Colors.black54,

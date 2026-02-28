@@ -7,7 +7,7 @@ import 'package:software_analista/domain/models/percorsoAssegnato.dart';
 import 'package:software_analista/domain/models/progressoPercorso.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
 
-class Bambino{
+class Utente{
     final String? id;
     final String nome;
     final String cognome;
@@ -17,12 +17,12 @@ class Bambino{
     final String? numTelefono;
     final Scuole scuolaFrequentata;
     final TitoloStudio titoloStudio;
-    final ProgressoPercorso? progressoBambino;
+    final ProgressoPercorso? progressoUtente;
     final List<PercorsoAssegnato>? percorsiAssegnati;
     final String? codiceGioco;
     final Diagnosi? diagnosi;
 
-    Bambino({
+    Utente({
       this.id,
       required this.nome,
       required this.cognome,
@@ -32,15 +32,15 @@ class Bambino{
       this.numTelefono,
       required this.scuolaFrequentata,
       required this.titoloStudio,
-      this.progressoBambino,
+      this.progressoUtente,
       this.percorsiAssegnati,
       this.codiceGioco,
       this.diagnosi,
   });
 
   // 🔹 JSON → Dart
-  factory Bambino.fromJson(Map<String, dynamic> json) {
-    return Bambino(
+  factory Utente.fromJson(Map<String, dynamic> json) {
+    return Utente(
       id: json['_id'],
       nome: json['nome'],
       cognome: json['cognome'],

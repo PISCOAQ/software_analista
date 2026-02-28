@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:software_analista/data/repository/assegna_percorsoRepository.dart';
 import 'package:software_analista/data/service/assegna_percorsoService.dart';
 import 'package:software_analista/ui/screens/HomeScreen.dart';
-import 'package:software_analista/ui/viewmodels/lista_bambiniViewmodel.dart';
+import 'package:software_analista/ui/viewmodels/lista_utentiViewmodel.dart';
 import 'package:software_analista/ui/viewmodels/lista_percorsiViewmodel.dart';
 
 void main() {
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
           update: (_, service, __) => AssegnaPercorsoRepository(service),
         ),
         ChangeNotifierProvider(
-          create: (_) => lista_bambiniViewmodel()..loadBambini(),
+          create: (_) => lista_utentiViewmodel()..loadUtenti(),
           ),
         ChangeNotifierProvider(
           create: (_) => lista_percorsiViewModel()
