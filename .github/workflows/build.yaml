@@ -121,7 +121,7 @@ jobs:
         run: |
           # Deploy using the OCI Helm chart and values from this repo,
           # overriding image repository & tag from this workflow.
-          helm upgrade --install marco-mariani-game "${HELM_CHART_URL}" \
+          helm upgrade --install software-analista "${HELM_CHART_URL}" \
             --version "${HELM_CHART_VERSION}" \
             --namespace "${K8S_NAMESPACE}" \
             --values ./helm/values.yaml \
