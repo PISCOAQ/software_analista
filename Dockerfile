@@ -25,6 +25,3 @@ COPY --from=build /app/build/web .
 USER root
 RUN chown -R 101:101 /usr/share/nginx/html
 USER 101
-
-# Extra assets from host (Flutter build already bundles pubspec assets into build/web)
-COPY --chown=101:101 ./assets ./assets
