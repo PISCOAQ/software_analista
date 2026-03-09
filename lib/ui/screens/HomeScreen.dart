@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                                             DataCard(
                                               icon: Icons.alt_route,
                                               title: 'Percorsi',
-                                              value: '0',
+                                              value: '3',
                                               color: Colors.orange,
                                             ),
                                           ],
@@ -109,7 +109,7 @@ class HomeScreen extends StatelessWidget {
                                           ),
                                           child: SingleChildScrollView(
                                             scrollDirection:
-                                              Axis.vertical,
+                                              Axis.horizontal,
                                             child: DataTable(
                                               columnSpacing: 40,
                                               headingRowColor:

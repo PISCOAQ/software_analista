@@ -39,10 +39,6 @@ class AssegnaPercorsoViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ===============================
-  // AZIONI
-  // ===============================
-
   /// Conferma l'assegnazione del percorso all'utente
   Future<void> confermaAssociazione() async {
   _setLoading(true);

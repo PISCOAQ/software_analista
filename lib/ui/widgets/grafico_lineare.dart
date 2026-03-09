@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:software_analista/domain/models/linechartpoint.dart';
+
 class LineChartWidget extends StatelessWidget {
   final List<LineChartPoint> data;
   final String title;
@@ -23,10 +24,6 @@ class LineChartWidget extends StatelessWidget {
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        /*side: const BorderSide(
-          color: Colors.black,
-          width: 2,
-        ),*/
       ),
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 16),
@@ -38,6 +35,28 @@ class LineChartWidget extends StatelessWidget {
           /// ASSE X
           primaryXAxis: CategoryAxis(
             title: AxisTitle(text: xAxisTitle),
+
+            axisLine: const AxisLine(
+              width: 2,
+              color: Colors.black,
+            ),
+
+            majorTickLines: const MajorTickLines(
+              width: 2,
+              color: Colors.black,
+              size: 6,
+            ),
+
+            majorGridLines: const MajorGridLines(
+              width: 0.5,
+              color: Colors.grey,
+            ),
+
+            labelStyle: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w600,
+            ),
+
             labelRotation: -45,
           ),
 
@@ -46,17 +65,38 @@ class LineChartWidget extends StatelessWidget {
             title: AxisTitle(text: yAxisTitle),
             minimum: 0,
             maximum: maxY,
+
+            axisLine: const AxisLine(
+              width: 2,
+              color: Colors.black,
+            ),
+
+            majorTickLines: const MajorTickLines(
+              width: 2,
+              color: Colors.black,
+              size: 6,
+            ),
+
+            majorGridLines: const MajorGridLines(
+              width: 0.5,
+              color: Colors.grey,
+            ),
+
+            labelStyle: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w600,
+            ),
           ),
 
           series: <LineSeries<LineChartPoint, String>>[
             LineSeries<LineChartPoint, String>(
               dataSource: data,
-
               xValueMapper: (point, _) => point.label,
               yValueMapper: (point, _) => point.value,
 
               color: Colors.blue,
               width: 3,
+
               markerSettings: const MarkerSettings(
                 isVisible: true,
                 height: 8,

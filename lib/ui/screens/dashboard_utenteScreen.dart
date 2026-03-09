@@ -296,12 +296,11 @@ class _Dashboard_utenteScreenState extends State<Dashboard_utenteScreen> {
                                     columnSpacing: 20,
                                     dividerThickness: 1,
                                     columns: const [
-                                      DataColumn(
-                                          label: Text("Test Post-Esercitazione")),
+                                      DataColumn(label: Text("Test Post-Esercitazione")),
                                       DataColumn(label: Text("Risultato")),
                                       DataColumn(label: Text('Tempo medio di reazione')),
                                       DataColumn(label: Text('Movimento del mouse')),
-                                      DataColumn(label: Text('Metodo di interazione'))
+                                      //DataColumn(label: Text('Metodo di interazione'))
                                     ],
                                     rows: vm.testPost.map((test) {
                                       return DataRow(
@@ -386,44 +385,53 @@ class _Dashboard_utenteScreenState extends State<Dashboard_utenteScreen> {
                                         width: double.infinity,
                                         padding: const EdgeInsets.all(20),
                                         decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.black, width: 2),
                                           borderRadius: BorderRadius.circular(12),
                                           color: Colors.white,
                                         ),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            const Text(
-                                              "Diagnosi",
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
+                                            const Center(
+                                              child:  Text(
+                                                "Diagnosi",
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
-                                            const SizedBox(height: 12),
+                                            const SizedBox(height: 16),
+                                      
                                             Text(
                                               diagnosi.testo,
                                               style: const TextStyle(fontSize: 16),
                                             ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              "Gravità: ${diagnosi.livelloGravita.name}",
-                                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                            const SizedBox(height: 16),
+                                            Row(
+                                              children: [
+                                                const Text("Gravità: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                                Text(diagnosi.livelloGravita.name),
+                                              ],
                                             ),
+                               
                                             if (diagnosi.note != null && diagnosi.note!.isNotEmpty)
                                               Padding(
-                                                padding: const EdgeInsets.only(top: 4.0),
-                                                child: Text(
-                                                  "Note: ${diagnosi.note}",
-                                                  style: const TextStyle(fontSize: 14),
+                                                padding: const EdgeInsets.only(top: 8.0),
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text("Note: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                                    Expanded(child: Text(diagnosi.note!)),
+                                                  ],
                                                 ),
                                               ),
-                                            const SizedBox(height: 8),
+
+                                            const SizedBox(height: 12),
                                             Text(
                                               "Inserita il: ${_formatDate(diagnosi.dataInserimento)}",
-                                              style: const TextStyle(fontSize: 12, color: Colors.white),
+                                              style: const TextStyle(fontSize: 12, color: Colors.black),
                                             ),
-                                            const SizedBox(height: 12),
+                                            const SizedBox(height: 20),
                                             Row(
                                               children: [
                                                 ElevatedButton.icon(

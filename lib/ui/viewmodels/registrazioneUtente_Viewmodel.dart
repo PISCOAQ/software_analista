@@ -60,7 +60,6 @@ class Registrazioneutente_Viewmodel extends ChangeNotifier{
     email = value;
     notifyListeners();
   }
-
   void updateTelefono(String? value) {
     telefono = value;
     notifyListeners();
