@@ -62,7 +62,7 @@ class Dashboard_utenteService{
 
 
   Future<String> downloadExcel(String utenteId, String nomeUtente) async {
-    final url = 'http://localhost:3000/export/excel/$utenteId';
+    final url = '$baseUrl/export/excel/$utenteId';
 
     final response = await http.get(Uri.parse(url));
 
