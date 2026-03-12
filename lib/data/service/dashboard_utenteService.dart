@@ -9,7 +9,7 @@ import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
 
 class Dashboard_utenteService{
-  final String baseUrl = 'http://localhost:3000';
+  static final String baseUrl = String.fromEnvironment('API_URL', defaultValue: 'http://localhost:3000');
 
   Future<List<Test>> getTestByUtente(String? codiceGioco) async {
     final response = await http.get(

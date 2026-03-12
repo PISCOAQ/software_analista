@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:software_analista/domain/models/risultatoTest.dart';
 
 class HomeService{
-  final String baseUrl = 'http://localhost:3000';
+  static final String baseUrl = String.fromEnvironment('API_URL', defaultValue: 'http://localhost:3000');
 
   Future<List<Test>> getAllTentativi() async {
     final response = await http.get(
