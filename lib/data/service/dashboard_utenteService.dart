@@ -7,9 +7,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Dashboard_utenteService{
-  static final String baseUrl = String.fromEnvironment('API_URL', defaultValue: 'http://localhost:3000');
+  static final String baseUrl = dotenv.env['API_URL'] ?? "http://localhost:3000";
 
   Future<List<Test>> getTestByUtente(String? codiceGioco) async {
     final response = await http.get(
