@@ -77,7 +77,7 @@ class _SelezionePercorsoScreenState extends State<SelezionePercorsoScreen> {
                             child: Consumer<lista_percorsiViewModel>(
                               builder: (context, vm, _) {
                                 final listaFiltrata = vm.percorsi.where((p) {
-                                  return p.nome.toLowerCase().contains(ricerca);
+                                  return p.title.toLowerCase().contains(ricerca);
                                 }).toList();
 
                                 if (listaFiltrata.isEmpty) {
@@ -98,7 +98,7 @@ class _SelezionePercorsoScreenState extends State<SelezionePercorsoScreen> {
                                         decoration: isSelected 
                                             ? BoxDecoration(border: Border.all(color: Colors.black, width: 2), borderRadius: BorderRadius.circular(16))
                                             : null,
-                                        child: percorso_card(
+                                        child: PercorsoCard(
                                           percorso: percorso,
                                           onTap: () {
                                             setState(() {

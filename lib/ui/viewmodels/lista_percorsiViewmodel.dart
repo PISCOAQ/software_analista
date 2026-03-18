@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:software_analista/data/repository/lista_percorsiRepository.dart';
+import 'package:software_analista/data/service/lista_percorsiService.dart';
 import 'package:software_analista/domain/models/percorso.dart';
-import 'package:software_analista/datiFinti/dati.dart';
 
 class lista_percorsiViewModel extends ChangeNotifier {
+  final PercorsiRepository repository = PercorsiRepository(PercorsiService());
   List<Percorso> _percorsi = [];
   bool _isLoading = true;
   String? errorMessage;
@@ -26,15 +28,11 @@ class lista_percorsiViewModel extends ChangeNotifier {
     try{
       await Future.delayed(const Duration(milliseconds: 300));
 
-      _percorsi = [
-        percorsoEmotivo,
-        percorsoGiocoso,
-        percorsoMotorio
-      ];
+      _percorsi = await repository.getPercorsi();
 
       errorMessage = null;
     } catch(e) {
-      errorMessage = "Errore nel caricamento dei percorsi";
+      errorMessage = "Errore nel caricamento dei percorsi: ${e}";
     }
 
       isLoading = false;
@@ -42,9 +40,9 @@ class lista_percorsiViewModel extends ChangeNotifier {
   }
 
   // Metodo opzionale per filtrare i percorsi
-  List<Percorso> filtraPercorsi(String query) {
+/*  List<Percorso> filtraPercorsi(String query) {
     return _percorsi
         .where((p) => p.nome.toLowerCase().contains(query.toLowerCase()))
         .toList();
-  }
+  }*/
 }

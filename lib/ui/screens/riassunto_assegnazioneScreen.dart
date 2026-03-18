@@ -75,7 +75,7 @@ class AssegnazioneRiassuntoScreen extends StatelessWidget {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    Expanded(child: percorso_card(percorso: vm.percorso!)),
+                                    Expanded(child: PercorsoCard(percorso: vm.percorso!)),
                                   ],
                                 ),
                                 

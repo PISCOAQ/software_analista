@@ -5,14 +5,24 @@ import 'package:software_analista/ui/widgets/Sidebar.dart';
 import 'package:software_analista/ui/widgets/Topbar.dart';
 import 'package:software_analista/ui/widgets/percorso_card.dart';
 
-class Lista_percorsiScreen extends StatefulWidget {
-  const Lista_percorsiScreen({super.key});
+class ListaPercorsiScreen extends StatefulWidget {
+  const ListaPercorsiScreen({super.key});
 
   @override
-  State<Lista_percorsiScreen> createState() => _Lista_percorsiScreenState();
+  State<ListaPercorsiScreen> createState() => _ListaPercorsiScreenState();
 }
 
-class _Lista_percorsiScreenState extends State<Lista_percorsiScreen> {
+class _ListaPercorsiScreenState extends State<ListaPercorsiScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Carichiamo subito i percorsi quando lo screen viene costruito
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final vm = context.read<lista_percorsiViewModel>();
+      vm.loadPercorsi();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +43,9 @@ class _Lista_percorsiScreenState extends State<Lista_percorsiScreen> {
                 // Titolo della pagina
                 Center(
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 600,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    constraints: const BoxConstraints(maxWidth: 600),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       child: Text(
                         "Percorsi disponibili",
                         style: TextStyle(
@@ -69,18 +77,18 @@ class _Lista_percorsiScreenState extends State<Lista_percorsiScreen> {
 
                       return Center(
                         child: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            maxWidth: 600,
-                          ),
+                          constraints: const BoxConstraints(maxWidth: 600),
                           child: ListView.separated(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                             itemCount: vm.percorsi.length,
                             separatorBuilder: (_, __) => const SizedBox(height: 12),
                             itemBuilder: (context, index) {
                               final percorso = vm.percorsi[index];
-                              return percorso_card(
+                              return PercorsoCard(
                                 percorso: percorso,
-                                onTap: () {},
+                                onTap: () {
+                                  // TODO: azione al tap (apri dettagli)
+                                },
                               );
                             },
                           ),

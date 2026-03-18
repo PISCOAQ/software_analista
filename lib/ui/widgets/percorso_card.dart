@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:software_analista/domain/models/percorso.dart';
 
-class percorso_card extends StatelessWidget {
+class PercorsoCard extends StatelessWidget {
   final Percorso percorso;
   final VoidCallback? onTap;
 
-  const percorso_card({
+  const PercorsoCard({
     super.key,
     required this.percorso,
     this.onTap,
@@ -32,13 +32,14 @@ class percorso_card extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: [
-              /// INFO (ora occupa tutto lo spazio a sinistra)
+              // INFO (occupano tutto lo spazio a sinistra)
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Titolo del percorso
                     Text(
-                      percorso.nome,
+                      percorso.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -48,8 +49,18 @@ class percorso_card extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 6),
+                    // Numero di nodi
                     Text(
-                      "Nodi: ${percorso.numNodi}",
+                      "Nodi: ${percorso.nodes.length}",
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    // Autore
+                    Text(
+                      "Autore: ${percorso.author.username}",
                       style: const TextStyle(
                         fontSize: 13,
                         color: Colors.black54,
