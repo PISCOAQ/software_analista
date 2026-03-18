@@ -5,8 +5,10 @@ import 'package:software_analista/data/service/assegna_percorsoService.dart';
 import 'package:software_analista/ui/screens/HomeScreen.dart';
 import 'package:software_analista/ui/viewmodels/lista_utentiViewmodel.dart';
 import 'package:software_analista/ui/viewmodels/lista_percorsiViewmodel.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 

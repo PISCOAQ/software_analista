@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:software_analista/domain/models/utente.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AssegnaPercorsoService {
-  final String baseUrl = 'http://localhost:3000';
+  static final String baseUrl = dotenv.env['API_URL'] ?? "http://localhost:3000";
 
   /// Assegna un percorso a un utente
   Future<Utente> assegnaPercorso({

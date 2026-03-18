@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../domain/models/utente.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ListaUtentiService {
-  final String baseUrl = 'http://localhost:3000';
+  static final String baseUrl = dotenv.env['API_URL'] ?? "http://localhost:3000";
 
   Future<List<Utente>> listaUtenti() async {
     final response = await http.get(
