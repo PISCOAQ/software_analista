@@ -86,9 +86,7 @@ class _ListaPercorsiScreenState extends State<ListaPercorsiScreen> {
                               final percorso = vm.percorsi[index];
                               return PercorsoCard(
                                 percorso: percorso,
-                                onTap: () {
-                                  // TODO: azione al tap (apri dettagli)
-                                },
+                                onTap: () {},
                               );
                             },
                           ),

@@ -78,7 +78,8 @@ class HomeScreen extends StatelessWidget {
                                             DataCard(
                                               icon: Icons.alt_route,
                                               title: 'Percorsi',
-                                              value: '3',
+                                              value: 
+                                                vm.numeroPercorsi.toString(),
                                               color: Colors.orange,
                                             ),
                                           ],

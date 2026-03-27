@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:software_analista/data/repository/homeRepository.dart';
+import 'package:software_analista/data/repository/lista_percorsiRepository.dart';
 import 'package:software_analista/data/repository/lista_utentiRepository.dart';
 import 'package:software_analista/data/service/homeService.dart';
+import 'package:software_analista/data/service/lista_percorsiService.dart';
 import 'package:software_analista/data/service/lista_utentiService.dart';
 import 'package:software_analista/domain/enums/tipoTest.dart';
 import 'package:software_analista/domain/models/utente.dart';
@@ -13,6 +15,7 @@ import 'package:software_analista/domain/models/testStat.dart';
 class HomeViewModel extends ChangeNotifier {
   final ListaUtentiRepository _utentiRepository = ListaUtentiRepository(ListaUtentiService());
   final HomeRepository _homeRepository = HomeRepository(HomeService());
+  final PercorsiRepository _percorsiRepository = PercorsiRepository(PercorsiService());
 
   bool isLoading = false;
   List<Test> _tests = []; /// tutti i test dell'utente
@@ -44,11 +47,13 @@ class HomeViewModel extends ChangeNotifier {
     try {
       // Recupero lista completa degli utenti
       final List<Utente> utenti = await _utentiRepository.listaUtenti();
+      final percorsi = await _percorsiRepository.getPercorsi();
 
       // Calcolo dati per la home
       numeroUtenti = utenti.length;
       numeroMaschi = utenti.where((b) => b.sesso == Sesso.maschio).length;
       numeroFemmine = utenti.where((b) => b.sesso == Sesso.femmina).length;
+      numeroPercorsi = percorsi.length;
 
       // Recupero numero percorsi da definire
 
