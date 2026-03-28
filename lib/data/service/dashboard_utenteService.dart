@@ -8,6 +8,9 @@ import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/foundation.dart'; 
+import 'package:software_analista/utils/download_stub.dart'
+    if (dart.library.html) 'download_web.dart';
 
 class Dashboard_utenteService{
   static final String baseUrl = dotenv.env['API_URL'] ?? "http://localhost:3000";
@@ -61,7 +64,7 @@ class Dashboard_utenteService{
   }
 
 
-  Future<String> downloadExcel(String utenteId, String nomeUtente) async {
+  Future<String?> downloadExcel(String utenteId, String nomeUtente) async {
     final url = '$baseUrl/export/excel/$utenteId';
 
     final response = await http.get(Uri.parse(url));
@@ -72,6 +75,13 @@ class Dashboard_utenteService{
       );
     }
 
+    final bytes = response.bodyBytes;
+
+    if (kIsWeb) {
+      downloadFile(bytes, 'report_$nomeUtente.xlsx');
+      return null;
+    }
+
       // Ottieni la cartella Documenti o temporanea
       final dir = await getDownloadsDirectory()
          ?? await getApplicationDocumentsDirectory();
@@ -80,7 +90,7 @@ class Dashboard_utenteService{
 
       // Scrivi il file su disco
       final file = File(filePath);
-      await file.writeAsBytes(response.bodyBytes);
+      await file.writeAsBytes(bytes);
 
       print('File salvato in: $filePath');
 

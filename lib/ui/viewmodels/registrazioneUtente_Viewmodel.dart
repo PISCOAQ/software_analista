@@ -5,6 +5,7 @@ import 'package:software_analista/domain/enums/titoloStudio.dart';
 import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/domain/models/percorso.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
+import 'package:software_analista/utils/validazione_titolo_scuole.dart';
 
 class Registrazioneutente_Viewmodel extends ChangeNotifier{
   String nome = '';
@@ -92,6 +93,10 @@ class Registrazioneutente_Viewmodel extends ChangeNotifier{
     return regex.hasMatch(telefono);
   }
 
+  bool _isCoerente(Scuole scuola, TitoloStudio titolo) {
+    final scuoleValide = titoloToScuoleValide[titolo];
+    return scuoleValide?.contains(scuola) ?? false;
+}
 
   Future<Utente?> registraUtente() async {
     if (nome.isEmpty || cognome.isEmpty || dataNascita == null || scuolaFrequentata == null || titoloStudio == null) {
@@ -108,6 +113,12 @@ class Registrazioneutente_Viewmodel extends ChangeNotifier{
 
     if (!_validateTelefono(telefono)) {
       errorMessage = 'Numero di telefono non valido';
+      notifyListeners();
+      return null;
+    }
+
+    if (!_isCoerente(scuolaFrequentata!, titoloStudio!)) {
+      errorMessage = 'Scuola frequentata e titolo di studio non coerenti';
       notifyListeners();
       return null;
     }

@@ -20,7 +20,7 @@ class DashboardUtenterepository {
     return service.eliminaDiagnosi(utenteId);
   }
 
-  Future<String> downloadExcel(String utenteId, String nomeUtente) async {
+  Future<String?> downloadExcel(String utenteId, String nomeUtente) async {
     return service.downloadExcel(utenteId, nomeUtente);
   }
 }
