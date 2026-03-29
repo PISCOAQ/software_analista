@@ -1,3 +1,1 @@
-void downloadFile(List<int> bytes, String filename) {
-  // Non serve fare nulla qui
-}
+void downloadFile(List<int> bytes, String filename) {}
