@@ -10,7 +10,7 @@ import 'package:software_analista/domain/models/risultatoTest.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/foundation.dart'; 
 import 'package:software_analista/utils/download_stub.dart'
-    if (dart.library.html) 'package:software_analista/utils/download_stub.dart';
+    if (dart.library.html) 'package:software_analista/utils/download_web.dart';
 
 class Dashboard_utenteService{
   static final String baseUrl = dotenv.env['API_URL'] ?? "http://localhost:3000";
@@ -79,6 +79,7 @@ class Dashboard_utenteService{
 
     if (kIsWeb) {
       downloadFile(bytes, 'report_$nomeUtente.xlsx');
+      print("SONO SU WEB");
       return null;
     }
 

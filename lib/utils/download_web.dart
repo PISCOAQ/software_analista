@@ -1,6 +1,8 @@
 import 'dart:html' as html;
 
 void downloadFile(List<int> bytes, String filename) {
+
+  print("DOWNLOAD WEB CHIAMATO");
   final blob = html.Blob([bytes]);
   final url = html.Url.createObjectUrlFromBlob(blob);
 
