@@ -38,11 +38,4 @@ class lista_percorsiViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
   }
-
-  // Metodo opzionale per filtrare i percorsi
-/*  List<Percorso> filtraPercorsi(String query) {
-    return _percorsi
-        .where((p) => p.nome.toLowerCase().contains(query.toLowerCase()))
-        .toList();
-  }*/
 }

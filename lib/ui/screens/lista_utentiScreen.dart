@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:software_analista/data/service/dashboard_utenteService.dart';
-import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/ui/screens/dashboard_utenteScreen.dart';
 import 'package:software_analista/ui/screens/registrazione_utenteScreen.dart';
 import 'package:software_analista/ui/viewmodels/lista_utentiViewmodel.dart';
@@ -18,6 +17,7 @@ class Lista_utentiScreen extends StatefulWidget {
 }
 
 class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,15 +148,19 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
 
                 return UtenteCard(
                   utente: utente,
-                  onTap: () {
+                  onTap: () async {
                     final testService = Dashboard_utenteService();
-                    Navigator.push(
+
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) =>
-                            Dashboard_utenteScreen(utente: utente, repository: DashboardUtenterepository(testService),),
+                            Dashboard_utenteScreen(utente: utente, repository: DashboardUtenterepository(testService),
+                            ),
                       ),
                     );
+                    final vm = context.read<lista_utentiViewmodel>();
+                    await vm.loadUtenti();
                   },
                 );
               },
