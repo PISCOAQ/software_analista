@@ -1,7 +1,6 @@
 import 'package:software_analista/domain/enums/tipoTest.dart';
 import 'package:software_analista/domain/models/domandeTest.dart';
 
-
 class Test {
   final String testId;
   final String utenteId;
@@ -13,7 +12,6 @@ class Test {
   final double tempoMedioReazione;
   final int movimentoMouse;
   final List<Domandetest> domande;
-
 
   Test({
     required this.testId,
@@ -29,9 +27,8 @@ class Test {
   });
 
   int get totaleDomande => domande.length;
-  int get domandeCorrette =>
-    domande.where((d) => d.correct == true).length;
-  
+  int get domandeCorrette => domande.where((d) => d.correct == true).length;
+
   /*double get tempoMedioReazione {
     if (domande.isEmpty) return 0;
     return domande
@@ -40,28 +37,23 @@ class Test {
         domande.length;
   }*/
 
-
-
-
   factory Test.fromJson(Map<String, dynamic> json) {
     final domandeJson = json['domande'] as List<dynamic>? ?? [];
-    print(json['superato'].runtimeType); // deve stampare bool
 
     return Test(
       testId: json['_id'],
       utenteId: json['utenteId'],
       percorsoId: json['percorsoId'],
       nomeTest: json['nomeTest'],
-      tipoTest: json['tipoTest'] == 'pre'
-          ? TipoTest.pre
-          : TipoTest.post,
+      tipoTest: json['tipoTest'] == 'pre' ? TipoTest.pre : TipoTest.post,
       superato: json['superato'] as bool,
       tempoMedioReazione: (json['tempoMedioReazione'] as num).toDouble(),
       //metodoInterazione: json['metodoInterazione'],
       movimentoMouse: json['movimentoMouse'] as int,
-      domande: domandeJson
-          .map((d) => Domandetest.fromJson(d as Map<String, dynamic>))
-          .toList(),
+      domande:
+          domandeJson
+              .map((d) => Domandetest.fromJson(d as Map<String, dynamic>))
+              .toList(),
     );
   }
 }

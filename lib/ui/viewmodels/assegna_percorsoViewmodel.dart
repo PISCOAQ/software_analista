@@ -40,48 +40,23 @@ class AssegnaPercorsoViewModel extends ChangeNotifier {
 
   /// Conferma l'assegnazione del percorso all'utente
   Future<void> confermaAssociazione() async {
-  _setLoading(true);
-
-  try {
-    final utenteAggiornato =
-        await _repository.assegnaPercorso(
-          _utenteSelezionato!.id,
-          _percorsoSelezionato!.id,
-          _percorsoSelezionato!.title,
-        );
-
-    _utenteSelezionato = utenteAggiornato;
-
-  } catch (e) {
-    errore = 'Errore durante assegnazione percorso: $e';
-  }
-
-  _setLoading(false);
-  notifyListeners();
-}
-
-
-  /// Rimuove un percorso assegnato dal utente
-  /*Future<void> rimuoviPercorso(Percorso p) async {
-    if (_utenteSelezionato == null) return;
-
     _setLoading(true);
 
     try {
-      final utenteAggiornato = await _repository.rimuoviPercorso(
+      final utenteAggiornato = await _repository.assegnaPercorso(
         _utenteSelezionato!.id,
-        p.idEsterno,
+        _percorsoSelezionato!.id,
+        _percorsoSelezionato!.title,
       );
 
       _utenteSelezionato = utenteAggiornato;
-      errore = null;
     } catch (e) {
-      errore = 'Errore durante la rimozione del percorso';
-      debugPrint('Errore rimozione percorso: $e');
+      errore = 'Errore durante assegnazione percorso: $e';
     }
 
     _setLoading(false);
-  }*/
+    notifyListeners();
+  }
 
   // ===============================
   // UTILS

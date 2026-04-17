@@ -6,11 +6,17 @@ import 'package:software_analista/domain/models/utente.dart';
 class UtenteCard extends StatelessWidget {
   final Utente utente;
   final VoidCallback? onTap;
+  final bool isSelected;
+  final bool selectionMode;
+  final VoidCallback? onSelect;
 
   const UtenteCard({
     super.key,
     required this.utente,
     this.onTap,
+    this.isSelected = false,
+    this.selectionMode = false,
+    this.onSelect,
   });
 
   @override
@@ -20,10 +26,7 @@ class UtenteCard extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: Colors.black,
-        width: 1.5,
-        ),
+        side: BorderSide(color: Colors.black, width: 1.5),
       ),
       child: InkWell(
         onTap: onTap,
@@ -34,20 +37,24 @@ class UtenteCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: [
+              if (selectionMode)
+                Checkbox(value: isSelected, onChanged: (_) => onSelect?.call()),
+
+              if (selectionMode) const SizedBox(width: 8),
+
               /// ICONA UTENTE
               Container(
                 width: 46,
                 height: 46,
                 decoration: BoxDecoration(
-                  color: utente.sesso == Sesso.maschio
-    ? Colors.blue.shade400
-    : Colors.pink.shade400,
+                  color:
+                      utente.sesso == Sesso.maschio
+                          ? Colors.blue.shade400
+                          : Colors.pink.shade400,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  utente.sesso == Sesso.maschio
-                      ? Icons.male
-                      : Icons.female,
+                  utente.sesso == Sesso.maschio ? Icons.male : Icons.female,
                   size: 24,
                   color: Colors.white,
                 ),
@@ -83,11 +90,7 @@ class UtenteCard extends StatelessWidget {
               ),
 
               /// CHEVRON
-              const Icon(
-                Icons.chevron_right,
-                size: 26,
-                color: Colors.black54,
-              ),
+              const Icon(Icons.chevron_right, size: 26, color: Colors.black54),
             ],
           ),
         ),

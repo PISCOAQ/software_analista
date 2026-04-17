@@ -3,19 +3,25 @@ import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/data/service/lista_utentiService.dart';
 import 'package:software_analista/data/repository/lista_utentiRepository.dart';
 
-class lista_utentiViewmodel extends ChangeNotifier{
-  final ListaUtentiRepository _repository = ListaUtentiRepository(ListaUtentiService());
+class lista_utentiViewmodel extends ChangeNotifier {
+  final ListaUtentiRepository _repository = ListaUtentiRepository(
+    ListaUtentiService(),
+  );
   List<Utente> _utenti = [];
   bool _isLoading = true;
+  bool _selectionMode = false;
+  Set<String> _selectedUserIds = {};
 
   List<Utente> get utenti => _utenti;
   bool get isLoading => _isLoading;
+  bool get selectionMode => _selectionMode;
+  Set<String> get selectedUserIds => _selectedUserIds;
 
-  lista_utentiViewmodel(){
+  lista_utentiViewmodel() {
     loadUtenti();
   }
 
-  Future<void> loadUtenti() async{
+  Future<void> loadUtenti() async {
     _isLoading = true;
     notifyListeners();
 
@@ -48,5 +54,35 @@ class lista_utentiViewmodel extends ChangeNotifier{
       anni--;
     }
     return anni;
+  }
+
+  void toggleSelectionMode() {
+    _selectionMode = !_selectionMode;
+    _selectedUserIds.clear();
+    notifyListeners();
+  }
+
+  void toggleUserSelection(String id) {
+    if (_selectedUserIds.contains(id)) {
+      _selectedUserIds.remove(id);
+    } else {
+      _selectedUserIds.add(id);
+    }
+    notifyListeners();
+  }
+
+  bool isSelected(String id) {
+    return _selectedUserIds.contains(id);
+  }
+
+  Future<void> deleteSelectedUtenti() async {
+    await _repository.deleteUtenti(_selectedUserIds.toList());
+
+    _selectedUserIds.clear();
+    _selectionMode = false;
+
+    await loadUtenti();
+
+    notifyListeners();
   }
 }

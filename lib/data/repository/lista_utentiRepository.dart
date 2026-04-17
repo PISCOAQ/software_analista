@@ -9,4 +9,8 @@ class ListaUtentiRepository {
   Future<List<Utente>> listaUtenti() {
     return service.listaUtenti();
   }
+
+  Future<void> deleteUtenti(List<String> userIds) {
+    return service.deleteUtenti(userIds);
+  }
 }

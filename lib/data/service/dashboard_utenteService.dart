@@ -7,18 +7,18 @@ import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter/foundation.dart'; 
+import 'package:flutter/foundation.dart';
 import 'package:software_analista/utils/download_stub.dart'
     if (dart.library.html) 'package:software_analista/utils/download_web.dart';
 
-class Dashboard_utenteService{
-  static final String baseUrl = dotenv.env['API_URL'] ?? "http://localhost:3000";
+class Dashboard_utenteService {
+  static final String baseUrl =
+      dotenv.env['API_URL'] ?? "http://localhost:3000";
 
   Future<List<Test>> getTestByUtente(String? codiceGioco) async {
     final response = await http.get(
       Uri.parse('$baseUrl/api/tentativi-test/tentativi/$codiceGioco'),
     );
-    
 
     if (response.statusCode != 200) {
       throw Exception('Errore caricamento utenti');
@@ -26,13 +26,9 @@ class Dashboard_utenteService{
 
     final List data = jsonDecode(response.body);
     return data.map((e) => Test.fromJson(e)).toList();
-    
   }
 
-  Future<Utente> salvaDiagnosi(
-    String? utenteId,
-    Diagnosi diagnosi,
-  ) async {
+  Future<Utente> salvaDiagnosi(String? utenteId, Diagnosi diagnosi) async {
     final response = await http.put(
       Uri.parse('$baseUrl/utenti/$utenteId/diagnosi'),
       headers: {'Content-Type': 'application/json'},
@@ -62,41 +58,36 @@ class Dashboard_utenteService{
     return Utente.fromJson(jsonDecode(response.body));
   }
 
-
   Future<String?> downloadExcel(String utenteId, String nomeUtente) async {
     final url = '$baseUrl/export/excel/$utenteId';
 
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode != 200) {
-      throw Exception(
-        'Errore download Excel: ${response.statusCode}',
-      );
+      throw Exception('Errore download Excel: ${response.statusCode}');
     }
 
     final bytes = response.bodyBytes;
 
     if (kIsWeb) {
       downloadFile(bytes, 'report_$nomeUtente.xlsx');
-      print("SONO SU WEB");
       return null;
     }
 
-      // Ottieni la cartella Documenti o temporanea
-      final dir = await getDownloadsDirectory()
-         ?? await getApplicationDocumentsDirectory();
+    // Ottieni la cartella Documenti o temporanea
+    final dir =
+        await getDownloadsDirectory() ??
+        await getApplicationDocumentsDirectory();
 
-      final filePath = '${dir.path}/report_$nomeUtente.xlsx';
+    final filePath = '${dir.path}/report_$nomeUtente.xlsx';
 
-      // Scrivi il file su disco
-      final file = File(filePath);
-      await file.writeAsBytes(bytes);
+    // Scrivi il file su disco
+    final file = File(filePath);
+    await file.writeAsBytes(bytes);
 
-      print('File salvato in: $filePath');
+    // Apri il file (opzionale)
+    OpenFile.open(filePath);
 
-      // Apri il file (opzionale)
-      OpenFile.open(filePath);
-
-      return filePath;
+    return filePath;
   }
 }
