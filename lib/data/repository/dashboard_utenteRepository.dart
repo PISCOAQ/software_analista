@@ -8,19 +8,23 @@ class DashboardUtenterepository {
 
   DashboardUtenterepository(this.service);
 
-  Future<List<Test>> getTestByUtente(String? codiceGioco){
+  Future<List<Test>> getTestByUtente(String? codiceGioco) {
     return service.getTestByUtente(codiceGioco);
   }
 
-  Future<Utente> salvaDiagnosi(String? utenteId, Diagnosi diagnosi){
+  Future<Utente> salvaDiagnosi(String? utenteId, Diagnosi diagnosi) {
     return service.salvaDiagnosi(utenteId, diagnosi);
   }
 
-  Future<Utente> eliminaDiagnosi(String? utenteId){
+  Future<Utente> eliminaDiagnosi(String? utenteId) {
     return service.eliminaDiagnosi(utenteId);
   }
 
   Future<String?> downloadExcel(String utenteId, String nomeUtente) async {
     return service.downloadExcel(utenteId, nomeUtente);
+  }
+
+  Future<void> rimuoviPercorso(String codiceGioco, String percorsoId) async {
+    await service.rimuoviPercorsoUtente(codiceGioco, percorsoId);
   }
 }

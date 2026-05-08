@@ -3,6 +3,7 @@ import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/domain/models/percorso.dart';
 import 'package:software_analista/data/repository/assegna_percorsoRepository.dart';
 import 'package:software_analista/domain/models/percorsoAssegnato.dart';
+import 'package:software_analista/utils/appState.dart';
 
 class AssegnaPercorsoViewModel extends ChangeNotifier {
   final AssegnaPercorsoRepository _repository;
@@ -11,8 +12,9 @@ class AssegnaPercorsoViewModel extends ChangeNotifier {
   Percorso? _percorsoSelezionato;
   bool _isLoading = false;
   String? errore;
+  final AppState appState;
 
-  AssegnaPercorsoViewModel(this._repository);
+  AssegnaPercorsoViewModel(this._repository, this.appState);
 
   // ===============================
   // GETTERS
@@ -50,6 +52,7 @@ class AssegnaPercorsoViewModel extends ChangeNotifier {
       );
 
       _utenteSelezionato = utenteAggiornato;
+      appState.markUtentiDirty();
     } catch (e) {
       errore = 'Errore durante assegnazione percorso: $e';
     }

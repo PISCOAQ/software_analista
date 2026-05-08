@@ -28,6 +28,7 @@ class Dashboard_utenteScreen extends StatefulWidget {
 
 class _Dashboard_utenteScreenState extends State<Dashboard_utenteScreen> {
   late DashboardUtenteViewModel _vm;
+  bool gestionePercorsiMode = false;
 
   @override
   void initState() {
@@ -84,58 +85,131 @@ class _Dashboard_utenteScreenState extends State<Dashboard_utenteScreen> {
                               const SizedBox(height: 16),
 
                               /// DATI UTENTE
-                              UserInfoCard(utente: utente),
+                              UserInfoCard(
+                                utente: utente,
+                                gestionePercorsiMode: gestionePercorsiMode,
+                                onRemovePercorso: (percorsoId) async {
+                                  final conferma = await showDialog<bool>(
+                                    context: context,
+                                    builder:
+                                        (_) => AlertDialog(
+                                          title: const Text(
+                                            "Conferma eliminazione",
+                                          ),
+                                          content: const Text(
+                                            "Vuoi davvero rimuovere questo percorso dall'utente?",
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed:
+                                                  () => Navigator.pop(
+                                                    context,
+                                                    false,
+                                                  ),
+                                              child: const Text("Annulla"),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed:
+                                                  () => Navigator.pop(
+                                                    context,
+                                                    true,
+                                                  ),
+                                              child: const Text("Conferma"),
+                                            ),
+                                          ],
+                                        ),
+                                  );
+                                  if (conferma == true) {
+                                    await vm.rimuoviPercorso(percorsoId);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "Percorso rimosso con successo",
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
 
                               /// Codice utente
                               ///CodiceUtenteRow(codice: utente.codiceGioco),
                               const SizedBox(height: 16),
 
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: ElevatedButton.icon(
-                                  icon: const Icon(Icons.download),
-                                  label: const Text("Scarica report Excel"),
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 14,
+                              const SizedBox(height: 16),
+
+                              Row(
+                                children: [
+                                  ElevatedButton.icon(
+                                    icon: const Icon(Icons.download),
+                                    label: const Text("Scarica report Excel"),
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 14,
+                                      ),
+                                      textStyle: const TextStyle(fontSize: 15),
+                                      backgroundColor: Colors.black,
+                                      foregroundColor: Colors.white,
                                     ),
-                                    textStyle: const TextStyle(fontSize: 15),
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
+                                    onPressed:
+                                        vm.isLoading
+                                            ? null
+                                            : () async {
+                                              try {
+                                                await vm.esportaExcel(
+                                                  utente.id!,
+                                                  utente.nome,
+                                                );
+
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                      "Report Excel scaricato con successo",
+                                                    ),
+                                                  ),
+                                                );
+                                              } catch (e) {
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                      "Errore durante il download del report",
+                                                    ),
+                                                    backgroundColor: Colors.red,
+                                                  ),
+                                                );
+                                              }
+                                            },
                                   ),
-                                  onPressed:
-                                      vm.isLoading
-                                          ? null
-                                          : () async {
-                                            try {
-                                              await vm.esportaExcel(
-                                                utente.id!,
-                                                utente.nome,
-                                              );
-                                              ScaffoldMessenger.of(
-                                                context,
-                                              ).showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                    "Report Excel scaricato con successo",
-                                                  ),
-                                                ),
-                                              );
-                                            } catch (e) {
-                                              ScaffoldMessenger.of(
-                                                context,
-                                              ).showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                    "Errore durante il download del report",
-                                                  ),
-                                                  backgroundColor: Colors.red,
-                                                ),
-                                              );
-                                            }
-                                          },
-                                ),
+
+                                  const SizedBox(width: 16),
+
+                                  ElevatedButton.icon(
+                                    icon: const Icon(Icons.route),
+                                    label: const Text(
+                                      "Gestione percorsi utente",
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 14,
+                                      ),
+                                      textStyle: const TextStyle(fontSize: 15),
+                                      backgroundColor: Colors.black,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        gestionePercorsiMode =
+                                            !gestionePercorsiMode;
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
 
                               const SizedBox(height: 32),

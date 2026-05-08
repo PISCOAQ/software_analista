@@ -135,6 +135,16 @@ class DashboardUtenteViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> rimuoviPercorso(String percorsoId) async {
+    await _repository.rimuoviPercorso(utente.codiceGioco!, percorsoId);
+
+    utente.percorsiAssegnati.removeWhere(
+      (p) => p.percorsoIdEsterno == percorsoId,
+    );
+
+    notifyListeners();
+  }
+
   void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();

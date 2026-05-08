@@ -90,4 +90,18 @@ class Dashboard_utenteService {
 
     return filePath;
   }
+
+  Future<void> rimuoviPercorsoUtente(
+    String codiceGioco,
+    String percorsoId,
+  ) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/utenti/$codiceGioco/percorsi/$percorsoId'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Errore durante la rimozione del percorso');
+    }
+  }
 }

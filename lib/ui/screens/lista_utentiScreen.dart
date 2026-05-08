@@ -9,6 +9,7 @@ import 'package:software_analista/ui/widgets/Sidebar.dart';
 import 'package:software_analista/ui/widgets/Topbar.dart';
 import 'package:software_analista/data/repository/dashboard_utenteRepository.dart';
 import 'package:software_analista/ui/widgets/deleteDialog.dart';
+import 'package:software_analista/utils/appState.dart';
 
 class Lista_utentiScreen extends StatefulWidget {
   const Lista_utentiScreen({super.key});
@@ -18,6 +19,19 @@ class Lista_utentiScreen extends StatefulWidget {
 }
 
 class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final appState = context.read<AppState>();
+    final vm = context.read<lista_utentiViewmodel>();
+
+    if (appState.needsRefreshUtenti) {
+      vm.loadUtenti();
+      appState.clearUtentiDirty();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +54,9 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
                     horizontal: 24,
                     vertical: 12,
                   ),
-                  child: Text(
+                  child: const Text(
                     "Elenco Utenti",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -50,7 +64,7 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
                   ),
                 ),
 
-                /// AZIONI (BOTTONE)
+                /// AZIONI
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
@@ -59,6 +73,7 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      /// AGGIUNGI UTENTE
                       ElevatedButton.icon(
                         icon: const Icon(Icons.person_add, color: Colors.white),
                         label: const Text(
@@ -74,9 +89,6 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                         onPressed: () async {
@@ -150,9 +162,6 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.black,
                                   foregroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
                                 ),
                               ),
                             ],
@@ -163,7 +172,7 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
                   ),
                 ),
 
-                /// CONTENUTO LISTA
+                /// LISTA
                 Expanded(child: _buildContenuto()),
               ],
             ),
@@ -189,12 +198,9 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
           );
         }
 
-        /// 🔥 LISTA CENTRATA E NON A TUTTA LARGHEZZA
         return Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 600, // ⬅️ qui regoli la larghezza delle card
-            ),
+            constraints: const BoxConstraints(maxWidth: 600),
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(vertical: 16),
               itemCount: vm.utenti.length,
@@ -226,8 +232,7 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
                               ),
                             );
 
-                            ///final vm = context.read<lista_utentiViewmodel>();
-                            await vm.loadUtenti();
+                            // ❌ niente più vm.loadUtenti()
                           },
                 );
               },

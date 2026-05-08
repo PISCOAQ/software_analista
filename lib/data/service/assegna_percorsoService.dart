@@ -4,7 +4,8 @@ import 'package:software_analista/domain/models/utente.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AssegnaPercorsoService {
-  static final String baseUrl = dotenv.env['API_URL'] ?? "http://localhost:3000";
+  static final String baseUrl =
+      dotenv.env['API_URL'] ?? "http://localhost:3000";
 
   /// Assegna un percorso a un utente
   Future<Utente> assegnaPercorso({
@@ -16,9 +17,7 @@ class AssegnaPercorsoService {
 
     final response = await http.post(
       url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'percorsoIdEsterno': percorsoIdEsterno,
         'nomePercorso': nomePercorso,
@@ -29,9 +28,7 @@ class AssegnaPercorsoService {
       final Map<String, dynamic> json = jsonDecode(response.body);
       return Utente.fromJson(json['utente']);
     } else {
-      throw Exception(
-        'Errore assegnazione percorso (${response.statusCode})',
-      );
+      throw Exception('Errore assegnazione percorso (${response.statusCode})');
     }
   }
 }

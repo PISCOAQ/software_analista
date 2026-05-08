@@ -6,6 +6,7 @@ import 'package:software_analista/ui/screens/HomeScreen.dart';
 import 'package:software_analista/ui/viewmodels/lista_utentiViewmodel.dart';
 import 'package:software_analista/ui/viewmodels/lista_percorsiViewmodel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:software_analista/utils/appState.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
@@ -27,10 +28,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => lista_utentiViewmodel()..loadUtenti(),
-          ),
-        ChangeNotifierProvider(
-          create: (_) => lista_percorsiViewModel()
-          ),
+        ),
+        ChangeNotifierProvider(create: (_) => lista_percorsiViewModel()),
+        ChangeNotifierProvider(create: (_) => AppState()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
