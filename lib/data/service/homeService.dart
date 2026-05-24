@@ -6,9 +6,8 @@ import 'package:software_analista/utils/api_response_handler.dart';
 import 'package:software_analista/utils/token_storage.dart';
 
 class HomeService {
-  /*static final String baseUrl =
-      dotenv.env['API_URL'] ?? "http://localhost:3000";*/
-  static final String baseUrl = "http://localhost:3000";
+  static final String baseUrl =
+      dotenv.env['API_URL'] ?? "http://localhost:3000";
 
   Future<List<Test>> getAllTentativi() async {
     final token = await TokenStorage.getToken();

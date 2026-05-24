@@ -6,9 +6,8 @@ import '../../domain/models/utente.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ListaUtentiService {
-  /*static final String baseUrl =
-      dotenv.env['API_URL'] ?? "http://localhost:3000";*/
-  static final String baseUrl = "http://localhost:3000";
+  static final String baseUrl =
+      dotenv.env['API_URL'] ?? "http://localhost:3000";
 
   Future<List<Utente>> listaUtenti() async {
     final token = await TokenStorage.getToken();

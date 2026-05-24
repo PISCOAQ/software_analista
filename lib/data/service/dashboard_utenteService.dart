@@ -14,9 +14,8 @@ import 'package:software_analista/utils/download_stub.dart'
 import 'package:software_analista/utils/token_storage.dart';
 
 class DashboardUtenteService {
-  /*static final String baseUrl =
-      dotenv.env['API_URL'] ?? "http://localhost:3000";*/
-  static final String baseUrl = "http://localhost:3000";
+  static final String baseUrl =
+      dotenv.env['API_URL'] ?? "http://localhost:3000";
 
   Future<List<Test>> getTestByUtente(String? codiceGioco) async {
     final token = await TokenStorage.getToken();

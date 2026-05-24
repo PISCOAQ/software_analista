@@ -6,9 +6,8 @@ import 'package:software_analista/utils/api_response_handler.dart';
 import 'package:software_analista/utils/token_storage.dart';
 
 class AssegnaPercorsoService {
-  /*static final String baseUrl =
-      dotenv.env['API_URL'] ?? "http://localhost:3000";*/
-  static final String baseUrl = "http://localhost:3000";
+  static final String baseUrl =
+      dotenv.env['API_URL'] ?? "http://localhost:3000";
 
   /// Assegna un percorso a un utente
   Future<Utente> assegnaPercorso({
