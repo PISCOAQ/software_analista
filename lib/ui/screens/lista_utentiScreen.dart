@@ -10,6 +10,7 @@ import 'package:software_analista/ui/widgets/Topbar.dart';
 import 'package:software_analista/data/repository/dashboard_utenteRepository.dart';
 import 'package:software_analista/ui/widgets/deleteDialog.dart';
 import 'package:software_analista/utils/appState.dart';
+import 'package:software_analista/utils/session_expired_exception.dart';
 
 class Lista_utentiScreen extends StatefulWidget {
   const Lista_utentiScreen({super.key});
@@ -27,7 +28,19 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
     final vm = context.read<lista_utentiViewmodel>();
 
     if (appState.needsRefreshUtenti) {
-      vm.loadUtenti();
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        try {
+          await vm.loadUtenti();
+        } catch (e) {
+          if (e is SessionExpiredException) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => false,
+            );
+          }
+        }
+      });
       appState.clearUtentiDirty();
     }
   }
@@ -162,6 +175,9 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.black,
                                   foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
                                 ),
                               ),
                             ],
@@ -217,7 +233,7 @@ class _Lista_utentiScreenState extends State<Lista_utentiScreen> {
                       vm.selectionMode
                           ? () => vm.toggleUserSelection(utente.id!)
                           : () async {
-                            final testService = Dashboard_utenteService();
+                            final testService = DashboardUtenteService();
 
                             await Navigator.push(
                               context,

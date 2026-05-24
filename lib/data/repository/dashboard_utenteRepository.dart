@@ -4,7 +4,7 @@ import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
 
 class DashboardUtenterepository {
-  final Dashboard_utenteService service;
+  final DashboardUtenteService service;
 
   DashboardUtenterepository(this.service);
 
@@ -24,7 +24,7 @@ class DashboardUtenterepository {
     return service.downloadExcel(utenteId, nomeUtente);
   }
 
-  Future<void> rimuoviPercorso(String codiceGioco, String percorsoId) async {
-    await service.rimuoviPercorsoUtente(codiceGioco, percorsoId);
+  Future<void> rimuoviPercorso(String utenteId, String percorsoId) async {
+    await service.rimuoviPercorsoUtente(utenteId, percorsoId);
   }
 }

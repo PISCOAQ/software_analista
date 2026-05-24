@@ -4,6 +4,7 @@ import 'package:software_analista/domain/models/percorso.dart';
 import 'package:software_analista/data/repository/assegna_percorsoRepository.dart';
 import 'package:software_analista/domain/models/percorsoAssegnato.dart';
 import 'package:software_analista/utils/appState.dart';
+import 'package:software_analista/utils/session_expired_exception.dart';
 
 class AssegnaPercorsoViewModel extends ChangeNotifier {
   final AssegnaPercorsoRepository _repository;
@@ -54,6 +55,9 @@ class AssegnaPercorsoViewModel extends ChangeNotifier {
       _utenteSelezionato = utenteAggiornato;
       appState.markUtentiDirty();
     } catch (e) {
+      if (e is SessionExpiredException) {
+        rethrow;
+      }
       errore = 'Errore durante assegnazione percorso: $e';
     }
 

@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/data/service/lista_utentiService.dart';
 import 'package:software_analista/data/repository/lista_utentiRepository.dart';
+import 'package:software_analista/utils/session_expired_exception.dart';
 
 class lista_utentiViewmodel extends ChangeNotifier {
   final ListaUtentiRepository _repository = ListaUtentiRepository(
     ListaUtentiService(),
   );
   List<Utente> _utenti = [];
-  bool _isLoading = true;
+  bool _isLoading = false;
   bool _selectionMode = false;
   Set<String> _selectedUserIds = {};
 
@@ -17,18 +18,30 @@ class lista_utentiViewmodel extends ChangeNotifier {
   bool get selectionMode => _selectionMode;
   Set<String> get selectedUserIds => _selectedUserIds;
 
-  lista_utentiViewmodel() {
-    loadUtenti();
+  void clearUtenti() {
+    _utenti = [];
+    _selectedUserIds.clear();
+    _selectionMode = false;
+    _isLoading = false;
+    notifyListeners();
   }
 
   Future<void> loadUtenti() async {
-    _isLoading = true;
-    notifyListeners();
+    try {
+      _isLoading = true;
+      notifyListeners();
 
-    await Future.delayed(const Duration(milliseconds: 500));
-    _utenti = await _repository.listaUtenti();
-    _isLoading = false;
-    notifyListeners();
+      await Future.delayed(const Duration(milliseconds: 500));
+      _utenti = await _repository.listaUtenti();
+    } catch (e) {
+      if (e is SessionExpiredException) {
+        rethrow;
+      }
+      print('Errore caricamento utenti: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   // Aggiunge un nuovo utente (opzionale)

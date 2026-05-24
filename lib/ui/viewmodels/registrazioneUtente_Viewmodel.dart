@@ -5,9 +5,10 @@ import 'package:software_analista/domain/enums/titoloStudio.dart';
 import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/domain/models/percorso.dart';
 import 'package:software_analista/domain/enums/sesso.dart';
+import 'package:software_analista/utils/session_expired_exception.dart';
 import 'package:software_analista/utils/validazione_titolo_scuole.dart';
 
-class Registrazioneutente_Viewmodel extends ChangeNotifier{
+class Registrazioneutente_Viewmodel extends ChangeNotifier {
   String nome = '';
   String cognome = '';
   DateTime? dataNascita;
@@ -21,12 +22,14 @@ class Registrazioneutente_Viewmodel extends ChangeNotifier{
   String? errorMessage;
   final RegistrazioneUtenteRepository repository;
 
-  Registrazioneutente_Viewmodel({required this.repository}){
+  Registrazioneutente_Viewmodel({required this.repository}) {
     _initForm();
   }
 
-    Future<void> _initForm() async{
-    await Future.delayed(const Duration(milliseconds: 300)); // Simula caricamento
+  Future<void> _initForm() async {
+    await Future.delayed(
+      const Duration(milliseconds: 300),
+    ); // Simula caricamento
     isLoading = false;
     nome = '';
     cognome = '';
@@ -41,38 +44,45 @@ class Registrazioneutente_Viewmodel extends ChangeNotifier{
     notifyListeners();
   }
 
-  void updateNome( String value){
+  void updateNome(String value) {
     nome = value;
     notifyListeners();
   }
-  void updateCognome (String value){
+
+  void updateCognome(String value) {
     cognome = value;
     notifyListeners();
   }
-  void updateDataNascita(DateTime value){
+
+  void updateDataNascita(DateTime value) {
     dataNascita = value;
     notifyListeners();
   }
-  void updateSesso(Sesso? value){
+
+  void updateSesso(Sesso? value) {
     sesso = value!;
     notifyListeners();
   }
-   void updateEmail(String? value) {
+
+  void updateEmail(String? value) {
     email = value;
     notifyListeners();
   }
+
   void updateTelefono(String? value) {
     telefono = value;
     notifyListeners();
   }
-  void updateScuola(Scuole? value){
-    if(value != null){
+
+  void updateScuola(Scuole? value) {
+    if (value != null) {
       scuolaFrequentata = value;
       notifyListeners();
     }
   }
-  void updateTitolo(TitoloStudio? value){
-    if(value != null){
+
+  void updateTitolo(TitoloStudio? value) {
+    if (value != null) {
       titoloStudio = value;
       notifyListeners();
     }
@@ -96,10 +106,14 @@ class Registrazioneutente_Viewmodel extends ChangeNotifier{
   bool _isCoerente(Scuole scuola, TitoloStudio titolo) {
     final scuoleValide = titoloToScuoleValide[titolo];
     return scuoleValide?.contains(scuola) ?? false;
-}
+  }
 
   Future<Utente?> registraUtente() async {
-    if (nome.isEmpty || cognome.isEmpty || dataNascita == null || scuolaFrequentata == null || titoloStudio == null) {
+    if (nome.isEmpty ||
+        cognome.isEmpty ||
+        dataNascita == null ||
+        scuolaFrequentata == null ||
+        titoloStudio == null) {
       errorMessage = 'Compila tutti i campi obbligatori';
       notifyListeners();
       return null;
@@ -123,7 +137,6 @@ class Registrazioneutente_Viewmodel extends ChangeNotifier{
       return null;
     }
 
-
     isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -144,10 +157,13 @@ class Registrazioneutente_Viewmodel extends ChangeNotifier{
       final utenteCreato = await repository.creaUtente(utente);
       return utenteCreato;
     } catch (e) {
+      if (e is SessionExpiredException) {
+        rethrow;
+      }
       errorMessage = 'Errore durante la registrazione: $e';
       notifyListeners();
       return null;
-    } finally{
+    } finally {
       isLoading = false;
       notifyListeners();
     }

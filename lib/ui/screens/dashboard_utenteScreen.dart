@@ -11,6 +11,7 @@ import 'package:software_analista/ui/widgets/dashboardHeader.dart';
 import 'package:software_analista/ui/widgets/grafico_lineare.dart';
 import 'package:software_analista/ui/widgets/Sidebar.dart';
 import 'package:software_analista/ui/widgets/Topbar.dart';
+import 'package:software_analista/utils/session_expired_exception.dart';
 
 class Dashboard_utenteScreen extends StatefulWidget {
   final Utente utente;
@@ -40,7 +41,11 @@ class _Dashboard_utenteScreenState extends State<Dashboard_utenteScreen> {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _vm.initialize();
+      _vm.initialize().catchError((e) {
+        if (e is! SessionExpiredException) {
+          debugPrint('Errore inizializzazione dashboard utente: $e');
+        }
+      });
     });
   }
 

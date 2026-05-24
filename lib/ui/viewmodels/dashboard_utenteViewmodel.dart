@@ -5,6 +5,7 @@ import 'package:software_analista/domain/models/utente.dart';
 import 'package:software_analista/domain/models/diagnosi.dart';
 import 'package:software_analista/domain/models/linechartpoint.dart';
 import 'package:software_analista/domain/models/risultatoTest.dart';
+import 'package:software_analista/utils/session_expired_exception.dart';
 
 class DashboardUtenteViewModel extends ChangeNotifier {
   Utente _utente;
@@ -50,6 +51,9 @@ class DashboardUtenteViewModel extends ChangeNotifier {
       // Carica tutti i test dell'utente dalla repository
       _tests = await _repository.getTestByUtente(_utente.codiceGioco);
     } catch (e) {
+      if (e is SessionExpiredException) {
+        rethrow;
+      }
       print("Errore caricamento test: $e");
       _tests = [];
     }
@@ -95,6 +99,9 @@ class DashboardUtenteViewModel extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
+      if (e is SessionExpiredException) {
+        rethrow;
+      }
       debugPrint('Errore durante il salvataggio della diagnosi: $e');
     }
 
@@ -116,6 +123,9 @@ class DashboardUtenteViewModel extends ChangeNotifier {
       );
       _utente = utenteAggiornato;
     } catch (e) {
+      if (e is SessionExpiredException) {
+        rethrow;
+      }
       debugPrint('Errore durante eliminazione diagnosi: $e');
     }
 
@@ -136,7 +146,7 @@ class DashboardUtenteViewModel extends ChangeNotifier {
   }
 
   Future<void> rimuoviPercorso(String percorsoId) async {
-    await _repository.rimuoviPercorso(utente.codiceGioco!, percorsoId);
+    await _repository.rimuoviPercorso(utente.id!, percorsoId);
 
     utente.percorsiAssegnati.removeWhere(
       (p) => p.percorsoIdEsterno == percorsoId,
